@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/head.load.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>    
+    </head>
+    <body>
+        <div id="page-dryclean" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b" data-position="fixed">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Dry Clean</h1>
+        	</div>
+        	<div data-role="content">
+        		<form id="form-dryclean" action="" method="post">
+					<ol>
+        				<li>Select your preferred date and time.</li>
+        				<li>Add the clothes you wish to clean.</li>
+        				<li>Click the Pay Now button and complete the payment as the instruction.</li>
+        				<li>Put your clothes in the dry cleaning bags and leave it in the dry cleaning collection chute located at concierge desk.</li>
+        			</ol>
+        			<ul data-role="listview" data-inset="true">
+						<li data-icon="gear"><a class="date-picker">Preferred Date<p class="ui-li-aside" id="text-datetime"></p></a><input type="date" data-role="none" class="date-picker"/></li>
+					</ul>
+					<h3>Preferred Time</h3>
+					<fieldset data-role="controlgroup" data-inset="false">
+						<input type="radio" name="services" id="services-0" value="0" checked="checked" />
+						<label for="services-0">Collect at 8 am and return at 2 pm</label>
+						<input type="radio" name="services" id="services-1" value="1" />
+						<label for="services-1">Collect at 2 pm and return at 8 am next day</label>
+					</fieldset>	
+                    <h3>Items</h3>
+                    <ul data-role="listview" data-inset="true" data-split-icon="delete" id="list-items">
+						
+					</ul>
+                    <a href="dry_clean/categories.html" data-role="button" data-icon="plus" data-inline="true">Add Clothes</a> 
+        			<div data-role="fieldcontain" class="ui-hide-label">
+						<label for="comment">Additional Information</label>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
+        			</div>
+        			<h2>Total: $<span class="total">0</span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Pay Now</a>
+        		</form>
+        	</div><!-- /content -->
+        </div>
+    </body>
+</html>

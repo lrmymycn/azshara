@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/head.load.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script> 
+    </head>
+    <body>
+        <div id="page-babysitting" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Baby Sitting</h1>
+        	</div>
+        	<div data-role="content">
+        		<form id="form-cleaner" action="" method="post">
+        			<ol>
+        				<li>Select your preferred date and time, and enter a temporary door passcode for the cleaner.</li>
+        				<li>Click the Pay Now button and complete the payment as the instruction.</li>
+        			</ol>
+        			<ul data-role="listview" data-inset="true" data-split-icon="gear">
+						<li data-icon="gear"><a class="date-picker">Preferred Date and Time<p class="ui-li-aside" id="text-datetime"></p></a><input type="datetime-local" data-role="none" class="date-picker"/></li>
+						<li data-icon="gear"><a href="#popup-passcode" data-rel="popup" data-position-to="window">Door Passcode<p class="ui-li-aside" id="text-passcode"></p></a></li>
+					</ul>
+					<h3>Services</h3>
+					<fieldset data-role="controlgroup" data-inset="false">
+						<input type="radio" name="services" id="services-0" value="0" checked="checked" />
+						<label for="services-0">1 Hour Service</label>
+					
+						<input type="radio" name="services" id="services-1" value="1"  />
+						<label for="services-1">2 Hour Service</label>
+					</fieldset>	
+        			<div data-role="fieldcontain" class="ui-hide-label">
+						<label for="comment">Additional Information</label>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
+        			</div>
+        			<h2>Total: $<span class="total">120</span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Pay Now</a>
+        		</form>
+        	</div><!-- /content -->
+        	
+        	<div id="popup-passcode" data-role="popup" data-overlay-theme="a" >
+				<div data-role="header" data-theme="c">
+					<h1>Passcode</h1>
+				</div>
+				<div data-role="content" data-theme="c">
+					<input name="passcode" placeholder="Enter your passcode" />
+					<a href="#" data-role="button" data-rel="back" class="btn-passcode">Save</a>
+				</div>
+			</div><!-- /popup -->
+        </div>
+    </body>
+</html>

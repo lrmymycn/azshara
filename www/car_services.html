@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/head.load.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>      
+    </head>
+    <body>
+        <div id="page-carservices" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Car Services</h1>
+        	</div>
+        	<div data-role="content">
+        		<form id="form-carwash" action="" method="post">
+        			<ol>
+        				<li>Select your preferred date and time.</li>
+        				<li>Leave your contact info.</li>
+        				<li>Click Book button and our stuff will contact you shortly.</li>
+        			</ol>
+        			<ul data-role="listview" data-inset="true" data-split-icon="gear">
+						<li data-icon="gear"><a class="date-picker">Preferred Date<p class="ui-li-aside" id="text-datetime"></p></a><input type="date" data-role="none" class="date-picker"/></li>
+						<li data-icon="gear"><a href="#popup-contactname" data-rel="popup" data-position-to="window">Contact Name<p class="ui-li-aside" id="text-contactname"></p></a></li>
+						<li data-icon="gear"><a href="#popup-contactnumber" data-rel="popup" data-position-to="window">Contact Number<p class="ui-li-aside" id="text-contactnumber"></p></a></li>
+					</ul>
+        			<div data-role="fieldcontain" class="ui-hide-label">
+						<label for="comment">Additional Information</label>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
+        			</div>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-book">Book Now</a>
+        		</form>
+        	</div><!-- /content -->
+        	
+        	<div id="popup-contactname" data-role="popup" data-overlay-theme="a" >
+				<div data-role="header" data-theme="c">
+					<h1>Name</h1>
+				</div>
+				<div data-role="content" data-theme="c">
+					<input name="name" placeholder="Enter your name" />
+					<a href="#" data-role="button" data-rel="back" class="btn-contactname">Save</a>
+				</div>
+			</div><!-- /popup -->
+			
+			<div id="popup-contactnumber" data-role="popup" data-overlay-theme="a" >
+				<div data-role="header" data-theme="c">
+					<h1>Number</h1>
+				</div>
+				<div data-role="content" data-theme="c">
+					<input name="number" placeholder="Enter your number" />
+					<a href="#" data-role="button" data-rel="back" class="btn-contactnumber">Save</a>
+				</div>
+			</div><!-- /popup -->
+        </div>
+    </body>
+</html>

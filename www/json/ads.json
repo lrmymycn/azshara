@@ -1,0 +1,5 @@
+[
+  { "src" : "img/ads/pepsi.jpg", "name": "Pepsi", "link": "http://www.futra.com.au/" },
+  { "src" : "img/ads/nike.jpg", "name": "Nike", "link": "http://www.longton.com.au/" },
+  { "src" : "img/ads/landrover.jpg", "name": "Land Rover", "link": "http://www.domain.com.au/" }
+]

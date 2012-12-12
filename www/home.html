@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/head.load.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>  
+    </head>
+    <body>
+        <div id="page-home" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<h1>iButler</h1>
+        		<a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
+        	</div>
+        	<div data-role="content">
+        		<p>Welcome <span id="span-username"></span>!</p>
+        		<ul data-role="listview" data-inset="true">
+        			<li><a href="grocery.html" id="menu-grocery">Grocery</a></li>
+        			<li><a href="takeaway.html" id="menu-takeaway">Takeaway</a></li>
+        			<li><a href="taxi.html" id="menu-taxi">Taxi</a></li>
+        			<li><a href="dry_clean.html" id="menu-dry-clean">Dry Clean</a></li>
+        			<li><a href="car_wash.html" id="menu-car-wash">Car Wash</a></li>
+        			<li><a href="cleaner.html" id="menu-home-clean">Home Clean</a></li>
+        			<li><a href="car_services.html" id="menu-car-services">Car Services</a></li>
+        			<li><a href="baby_sitting.html" id="menu-baby-sitting">Baby Sitting</a></li>
+        			<li><a href="massage.html" id="menu-massage">Massage</a></li>
+        		</ul>
+        		<p>You have 2 unread message.</p>
+        		<ul data-role="listview" data-inset="true">
+        			<li data-icon="delete"><a>Your car key has been returned.<p class="ui-li-aside">5 mins ago</p></a></li>
+        			<li data-icon="delete"><a>Your order has been delivered.<p class="ui-li-aside">Yesterday</p></a></li>
+        		</ul>
+        		<div id="ads">
+        		
+        		</div>
+        	</div><!-- /content -->
+        </div>
+    </body>
+</html>
