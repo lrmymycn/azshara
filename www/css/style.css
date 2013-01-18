@@ -727,6 +727,11 @@ input.date-picker{
 	height:300px;
 	margin:30px auto 0;
 }
+#calendar{
+	width:600px;
+	height:490px;
+	margin:0 auto;
+}
 #calendar td{
 	background:#ffffff;
 }

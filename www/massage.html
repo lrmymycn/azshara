@@ -15,23 +15,45 @@
         <div id="page-massage" data-role="page" data-theme="c">
         	<div data-role="header" data-theme="b">
         		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Baby Sitting</h1>
+        		<h1>Massage</h1>
         	</div>
         	<div data-role="content">
         		<form id="form-cleaner" action="" method="post">
         			<ol>
-        				<li>Select your preferred date and time.</li>
+        				<li>Select your preferred time.</li>
         				<li>Click the Pay Now button and complete the payment as the instruction.</li>
         			</ol>
-        			<ul data-role="listview" data-inset="true" data-split-icon="gear">
-						<li><a href="cal/calendar.html">Preferred Date and Time<p class="ui-li-aside" id="text-datetime"></p></a></li>
-					</ul>
+        			<h3>Date</h3>
+        			<span id="selected-date"></span>
+        			<h3>Select Time</h3>
+        			<fieldset data-role="controlgroup" data-inset="false">
+						<input type="radio" name="time" id="time-0" value="9" checked="checked" />
+						<label for="time-0">9:00 AM</label>
+					
+						<input type="radio" name="time" id="time-1" value="10" />
+						<label for="time-1">10:00 AM</label>
+						
+						<input type="radio" name="time" id="time-2" value="11" />
+						<label for="time-2">11:00 AM</label>
+						
+						<input type="radio" name="time" id="time-3" value="12" />
+						<label for="time-3">12:00 PM</label>
+						
+						<input type="radio" name="time" id="time-4" value="13" />
+						<label for="time-4">1:00 PM</label>
+						
+						<input type="radio" name="time" id="time-5" value="14" />
+						<label for="time-5">2:00 PM</label>
+						
+						<input type="radio" name="time" id="time-6" value="15" />
+						<label for="time-6">3:00 PM</label>
+						
+						<input type="radio" name="time" id="time-7" value="16" />
+						<label for="time-7">4:00 PM</label>
+					</fieldset>
 					<h3>Services</h3>
-					<fieldset data-role="controlgroup" data-inset="false">
-						<input type="radio" name="services" id="services-0" value="0" checked="checked" />
-						<label for="services-0">1 Hour Service</label>					
-						<input type="radio" name="services" id="services-1" value="1"  />
-						<label for="services-1">2 Hour Service</label>
+					<fieldset id="massage-service-list" data-role="controlgroup" data-inset="false">
+						Loading...
 					</fieldset>	
         			<div data-role="fieldcontain" class="ui-hide-label">
 						<label for="comment">Additional Information</label>

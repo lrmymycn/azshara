@@ -13,23 +13,17 @@
     </head>
     <body>
         <div id="page-home" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b">
+        	<div data-role="header" data-theme="b" data-position="fixed">
         		<h1>iButler</h1>
         		<a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
         	</div>
         	<div data-role="content">
-        		<p>Welcome <span id="span-username"></span>!</p>
-        		<ul data-role="listview" data-inset="true">
-        			<li><a href="grocery.html" id="menu-grocery">Grocery</a></li>
-        			<li><a href="takeaway.html" id="menu-takeaway">Takeaway</a></li>
-        			<li><a href="taxi.html" id="menu-taxi">Taxi</a></li>
-        			<li><a href="dry_clean.html" id="menu-dry-clean">Dry Clean</a></li>
-        			<li><a href="car_wash.html" id="menu-car-wash">Car Wash</a></li>
-        			<li><a href="cleaner.html" id="menu-home-clean">Home Clean</a></li>
-        			<li><a href="car_services.html" id="menu-car-services">Car Services</a></li>
-        			<li><a href="baby_sitting.html" id="menu-baby-sitting">Baby Sitting</a></li>
-        			<li><a href="massage.html" id="menu-massage">Massage</a></li>
-        		</ul>
+        		<div id="calendar"></div>
+        		<div data-role="controlgroup" data-type="horizontal">
+        			<a href="grocery.html" data-role="button"><span id="menu-grocery">Grocery</span></a>
+        			<a href="takeaway.html" data-role="button"><span id="menu-takeaway">Takeaway</span></a>
+        			<a href="taxi.html" data-role="button"><span id="menu-taxi">Taxi</span></a>
+        		</div>
         		<p>You have 2 unread message.</p>
         		<ul data-role="listview" data-inset="true">
         			<li data-icon="delete"><a>Your car key has been returned.<p class="ui-li-aside">5 mins ago</p></a></li>
@@ -39,6 +33,18 @@
         		
         		</div>
         	</div><!-- /content -->
+        	
+        	<div data-role="popup" id="popupMenu" data-theme="a">
+				<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+					<li data-role="divider" data-theme="b">Book a Service</li>
+					<li><a href="dry_clean.html" id="menu-dry-clean">Dry Clean</a></li>
+					<li><a href="car_wash.html" id="menu-car-wash">Car Wash</a></li>
+					<li><a href="cleaner.html" id="menu-home-clean">Home Clean</a></li>
+					<li><a href="car_services.html" id="menu-car-services">Car Services</a></li>
+					<li><a href="baby_sitting.html" id="menu-baby-sitting">Baby Sitting</a></li>
+        			<li><a href="massage.html" id="menu-massage">Massage</a></li>
+				</ul>
+			</div><!-- /popup -->
         </div>
     </body>
 </html>

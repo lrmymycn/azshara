@@ -8,9 +8,14 @@ head.js("js/jquery.js", "js/jquery-ui.min.js", "js/jquery.mobile.js", "js/jquery
 });
 
 var Main = {
-	username:'',
+	unit:'',
 	password:'',
-	test:true,
+	test:false,
+	apiRoot:'http://ibutler.webility.com.au/',
+	serviceDateTime:null,
+	currentService:'',
+	currentEvent:null,
+	loading:false,
 	init:function(){
 		$(document).ready(function(){
 			Main.loadConfig();
@@ -23,25 +28,26 @@ var Main = {
 			BabySitting.init();
 			Massage.init();
 			Settings.init();
-			
-			Tools.initCalendar();
 		});
 	},
 	loadConfig:function(){
 		$.support.cors = true;
 		$.mobile.allowCrossDomainPages = true;
-		$.mobile.defaultPageTransition = 'slide';		
+		$.mobile.defaultPageTransition = 'slide';
+		$.ajaxSetup({
+			headers: { "cache-control": "no-cache" }
+		});		
 	},
 	getLoginStatus:function(){
-		Main.username = window.localStorage['username'];
+		Main.unit = window.localStorage['unit'];
 		Main.password = window.localStorage['password'];
 		
 		if(Main.test == true){
-			Main.username = 'test';
-			Main.password = 'test';
+			Main.unit = 'A101';
+			Main.password = '123456';
 		}
 		
-		if(Main.username == null || Main.password == null){
+		if(Main.unit == null || Main.password == null){
 			Login.init();
 			$.mobile.changePage('login.html', {transition:'none'});
 		}else{
@@ -52,10 +58,11 @@ var Main = {
 
 var Home = {
 	init:function(){
-		$('#page-home').live('pagecreate', function(){
-			$('#span-username').text(Main.username);
+		$('#page-home').live('pageshow', function(){
+			Main.currentService = 'Home';
 			
-			Home.slider();
+			Home.slider();	
+			Tools.initCalendar();
 			
 			$('#menu-grocery').text(_('Grocery'));
 			$('#menu-takeaway').text(_('Takeaway'));
@@ -301,36 +308,161 @@ var BabySitting = {
 }
 
 var Massage = {
-	datetime:null,
 	price:0,
-	init:function(){
-		$('#page-massage').live('pagecreate', function(){
-			if(Massage.datetime != null){
-				$('#text-datetime').text(Massage.datetime.toString('dddd, d MMMM yyyy hh:mm tt'));
-			}
-			//TODO fetch from ajax			
-			var services = [{id:1, name:"1 Hour Service", price:30.00},
-							{id:2, name:"2 Hour Service", price:60.00}];
+	init:function(){		
+		$('#page-massage').live('pageshow', function(){
+			Main.currentService = 'Massage';
 			
-			//TODO generate service list
-			BabySitting.price = services[0].price;
-			$('.total').text(BabySitting.price.toFixed(2));
-			
-			$('input[name="services"]').change(function(){
-				var index = $(this).val();
-				BabySitting.price = services[index].price;
-				$('.total').text(BabySitting.price.toFixed(2));
+			$('#selected-date').text(Main.serviceDateTime.toString('dddd, d MMMM yyyy'));
+									
+			var services = null;
+			$.mobile.loading('show');
+			Main.loading = true;
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + 'massage/services',
+				dataType: "json",
+				success: function (json) {
+					services = json;
+					
+					if(services != null && services.length > 0){
+						$('#massage-service-list').empty();
+						for(var i = 0; i < services.length; i++){
+							var service = services[i];
+							var $option = '';
+							if(i == 0){
+								$option = $('<input type="radio" name="services" id="service-' + service.id +'" value="' + service.id + '" data-price="' + service.price + '" checked="checked"/><label for="service-' + service.id + '">' + service.name + '</label>');
+							}else{
+								$option = $('<input type="radio" name="services" id="service-' + service.id +'" value="' + service.id + '" data-price="' + service.price + '"/><label for="service-' + service.id + '">' + service.name + '</label>');
+							}
+							 
+							$('#massage-service-list').append($option);
+						}
+						
+						$('#page-massage').trigger('create');
+						
+						Massage.price = services[0].price;
+						$('.total').text(Massage.price.toFixed(2));
+						
+						$('input[name="services"]').change(function(){
+							Massage.price = $(this).data('price');
+							$('.total').text(Massage.price.toFixed(2));
+						});
+					}
+				},
+				complete: function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
 			});
 			
+			
+			
 			$('a.btn-pay').click(function(){
-				//TODO Validate
-				$.mobile.changePage('home.html', {reverse: true});
+				if(Main.loading){
+					return;
+				}
+				
+				var hours = $('input[name="time"]:checked').val();
+				Main.serviceDateTime.addHours(hours);
+				var datetimeStr = Main.serviceDateTime.toString('yyyy-MM-ddTHH:mm:ss');
+				var serviceId = $('input[name="services"]:checked').val();
+				var comment = $('#comment').val();
+				
+				Main.loading = true;
+				$.mobile.loading('show');
+				$.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: Main.apiRoot + 'massage/book',
+                    dataType: "json",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+                    },
+                    data: '{"serviceId":' + serviceId + ', "date":"' + datetimeStr + '", "comment":"' + comment +'"}',
+                    success: function (response) {
+						var event = {
+							title: Main.serviceDateTime.toString('hh:mm tt'),
+							start: Main.serviceDateTime,
+							color: '#ff0000',
+							className: ['massage']
+						};
+						Tools.events.push(event);
+		
+						$.mobile.changePage('home.html', {reverse: true});
+                    },
+                    error: function (request, status, error) {
+						console.log(request.responseText);
+					},
+                    complete:function(){
+						Main.loading = false;
+						$.mobile.loading('hide');
+					}
+                });
+			});
+		});
+		$('#page-massage-booking').live('pageshow', function(){
+			Main.currentService = 'Massage';
+			var event = Main.currentEvent;
+			$('#selected-date').text(event.start.toString('dddd, d MMMM yyyy hh:mm tt'));
+			
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + 'massage/?id=' + event.id,
+				dataType: "json",
+				beforeSend: function (request) {
+					request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+				},
+				success: function (response) {
+					$('#selected-service').html(response.service);
+					$('#comment').html(response.comment);
+					$('span.total').text(response.price);
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});
+			
+			$('a.btn-cancel').click(function(){
+				Main.loading = true;
+				$.mobile.loading('show');
+				var event = Main.currentEvent;
+				
+				$.ajax({
+					type: 'GET',
+					url: Main.apiRoot + 'massage/cancel/' + event.id,
+					dataType: "json",
+					beforeSend: function (request) {
+						request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+					},
+					success: function (response) {
+						Tools.removeA(Tools.events, Main.currentEvent);
+						Main.currentEvent = null;
+						
+						$.mobile.changePage('home.html', {reverse: true});
+					},
+					error: function (request, status, error) {
+						console.log(request.responseText);
+					},
+					complete:function(){
+						Main.loading = false;
+						$.mobile.loading('hide');
+					}
+				});
+
 			});
 		});
 	}
 }
 
 var Tools = {
+	events:null,
 	initDate:function(time){
 		$('a.date-picker').click(function(){
 			$(this).parents('li').find('input.date-picker').focus();
@@ -357,37 +489,126 @@ var Tools = {
 			$('#text-passcode').parents('li').removeClass('ui-btn-active');
 		});
 	},
-	initCalendar:function(){
-		$('#page-calendar').live('pageshow', function(){
-			
-			if(!$('#calendar').hasClass('fc')){
-				$('#calendar').fullCalendar({
-					dayClick:function(date, allDay, jsEvent, view){
-						if(!$(this).hasClass('disabled')){
-							Massage.datetime = date;
-							$.mobile.changePage('time.html');
-						}
-					}
-				});
+	initCalendar:function(){		
+		$('#calendar').fullCalendar({
+			dayClick:function(date, allDay, jsEvent, view){				
+				if(!$(this).hasClass('disabled')){
+					var offset = $(this).offset();
+
+					var x = offset.left + ($(this).width() / 2);
+					var y = offset.top + ($(this).height() / 2);
+					
+					$('#popupMenu').popup('open', {x:x, y:y});
+					Main.serviceDateTime = date;
+				}
+			},
+			eventClick:function(event, jsEvent, view){				
+				if($.inArray('massage', event.className) > -1){
+					Main.currentEvent = event;
+					$.mobile.changePage('massage_booking.html');
+				}
+			},
+			viewDisplay:function(view){
+				$('#calendar .fc-content td.disabled').removeClass('disabled');
+				var date = $("#calendar").fullCalendar('getDate');
+				var month = date.getMonth();
+				var year = date.getFullYear();
+				var today = new Date();
+				var currentMonth = today.getMonth();
+				var currentYear = today.getFullYear();
 				
-				//custom calendar
-				$('#calendar td').each(function(){
-					if($(this).hasClass('fc-today')){
-						return false;
-					}else{
-						$(this).addClass('disabled');
-					}
-				});
+				if(month <= currentMonth && year <= currentYear){
+					$('#calendar .fc-content td').each(function(){
+						if($(this).hasClass('fc-today')){
+							return false;
+						}else{
+							$(this).addClass('disabled');
+						}
+					});
+				}
 			}
 		});
-		$('#page-time').live('pageshow', function(){
-			$('#btn-select').click(function(){
-				var hours = $('#page-time input:checked').val();
-				Massage.datetime.addHours(hours);
-				$.mobile.changePage('../massage.html');
+
+		$('#calendar').fullCalendar( 'addEventSource', function(start, end, callback){
+			var startStr = start.toString('yyyy-MM-dd');
+			var endStr = end.toString('yyyy-MM-dd');
+			
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'POST',
+				contentType: 'application/json',
+				url: Main.apiRoot + 'booking',
+				dataType: "json",
+				beforeSend: function (request) {
+					request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+				},
+				data: '{"start":"' + startStr + '", "end":"' + endStr + '"}',
+				success: function (response) {
+					Tools.events = new Array();
+					for(var i = 0; i < response.length; i++){
+						var booking = response[i];
+						var bookingDate = Date.parse(booking.date);
+						var event = {
+							id: booking.id,
+							title: bookingDate.toString('hh:mm tt'),
+							start: bookingDate,
+							color: '#ff0000',
+							className: ['massage']
+						}
+						Tools.events.push(event);
+					}
+					callback(Tools.events);
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
 			});
 		});
 	},
+	removeA: function (arr) {
+		var what, a = arguments, L = a.length, ax;
+		while (L > 1 && arr.length) {
+			what = a[--L];
+			while ((ax= arr.indexOf(what)) !== -1) {
+				arr.splice(ax, 1);
+			}
+		}
+		return arr;
+	},
+	encodeBase64: function(input) {
+		var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+		var result = '';
+		var chr1, chr2, chr3;
+		var enc1, enc2, enc3, enc4;
+		var i = 0;
+
+		do {
+			chr1 = input.charCodeAt(i++);
+			chr2 = input.charCodeAt(i++);
+			chr3 = input.charCodeAt(i++);
+
+			enc1 = chr1 >> 2;
+			enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+			enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+			enc4 = chr3 & 63;
+
+			if (isNaN(chr2)) {
+				enc3 = enc4 = 64;
+			} else if (isNaN(chr3)) {
+				enc4 = 64;
+			}
+
+			result += chars.charAt(enc1) + chars.charAt(enc2) + chars.charAt(enc3) + chars.charAt(enc4);
+		} while (i < input.length);
+
+		return result;
+	}
 }
 
 var Login = {
@@ -404,15 +625,24 @@ var Login = {
 					submitHandler: function(form) {
 						$('#submit-login').attr('disabled', true);
 						$.mobile.loading('show');
+						var unit = $('#form-login input#unit').val();
+						var password = $('#form-login input#password').val();
 						$.ajax({
-							url: "http://www.webility.com.au/post.php",
-							data: $('#form-login').serialize(),
-							success: function(data){
-								Main.username = $('#form-login input#username').val();
-								Main.password = $('#form-login input#password').val();
-								window.localStorage['username'] = Main.username;
+							type: 'POST',
+							contentType: 'application/json',
+							url: Main.apiRoot + "apartment/login",
+							dataType: "json",
+							data: '{"unit":"' + unit + '", "password":"' + password + '"}',
+							success: function(response){
+								Main.unit = unit;
+								Main.password = password;
+								window.localStorage['unit'] = Main.unit;
 								window.localStorage['password'] = Main.password;					
 								$.mobile.changePage('home.html');
+							},
+							error: function (request, status, error) {
+								var json = $.parseJSON(request.responseText);
+								alert(json.messages);
 							},
 							complete:function(){
 								$('#submit-login').attr('disabled', false);
@@ -433,7 +663,7 @@ var Settings = {
 		$('#page-settings').live('pagecreate', function(){
 			$('#btn-logout').click(function(){
 				//window.localStorage.clear();
-				window.localStorage.removeItem('username');
+				window.localStorage.removeItem('unit');
 				window.localStorage.removeItem('password');
 				Login.init();
 				$.mobile.changePage('login.html');
