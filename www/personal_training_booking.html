@@ -12,21 +12,21 @@
         <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
-        <div id="page-login" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="c">
-        		<h1>Login</h1>
+        <div id="page-personaltraining-booking" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Personal Training</h1>
         	</div>
         	<div data-role="content">
-        		<form id="form-login" action="" method="post">
-        			<div data-role="fieldcontain">
-    					<label for="unit">Unit:</label>
-    					<input type="text" name="unit" id="unit" class="required" value=""  />
-					</div>
-					<div data-role="fieldcontain">
-    					<label for="password">Password:</label>
-    					<input type="password" name="password" id="password" class="required" value=""  />
-					</div>
-        			<input type="submit" value="Submit" id="submit-login"/>
+        		<form id="form-cleaner" action="" method="post">
+        			<h3>Date and Time</h3>
+        			<span id="selected-date"></span>
+					<h3>Services</h3>
+					<span id="selected-service">Loading...</span>
+					<h3>Note</h3>
+        			<span id="comment">Loading...</span>
+        			<h2>Total: $<span class="total"></span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-cancel">Cancel Booking</a>
         		</form>
         	</div><!-- /content -->
         </div>

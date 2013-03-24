@@ -12,22 +12,15 @@
         <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
-        <div id="page-login" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="c">
-        		<h1>Login</h1>
+        <div id="page-servicelookup" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Service Lookup</h1>
         	</div>
         	<div data-role="content">
-        		<form id="form-login" action="" method="post">
-        			<div data-role="fieldcontain">
-    					<label for="unit">Unit:</label>
-    					<input type="text" name="unit" id="unit" class="required" value=""  />
-					</div>
-					<div data-role="fieldcontain">
-    					<label for="password">Password:</label>
-    					<input type="password" name="password" id="password" class="required" value=""  />
-					</div>
-        			<input type="submit" value="Submit" id="submit-login"/>
-        		</form>
+				<ul id="service-list" data-role="listview" data-inset="true" data-divider-theme="b">
+					
+				</ul>
         	</div><!-- /content -->
         </div>
     </body>

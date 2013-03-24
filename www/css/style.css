@@ -208,10 +208,11 @@ html .fc,
 .fc-widget-header,    /* <th>, usually */
 .fc-widget-content {  /* <td>, usually */
 	border: 1px solid #ccc;
+	background:#ffffff;
 	}
 	
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
-	background: #ffc;
+	/*background: #ffc;*/
 	}
 	
 .fc-cell-overlay { /* semi-transparent rectangle while dragging */
@@ -346,6 +347,8 @@ html .fc,
 	border-width: 0;
 	font-size: .85em;
 	cursor: default;
+	width:23px;
+	height:23px;
 	}
 	
 a.fc-event,
@@ -362,10 +365,78 @@ a.fc-event {
 	}
 	
 .fc-event-skin {
-	border-color: #36c;     /* default BORDER color */
-	background-color: #36c; /* default BACKGROUND color */
-	color: #fff;            /* default TEXT color */
+	/* border-color: #36c;      default BORDER color */
+	/* background-color: #36c;  default BACKGROUND color */
+	/* color: #fff;             default TEXT color */
+	/* text-align:center; */
+	overflow:hidden;
+	text-indent:-200px;
 	}
+
+.fc-dryclean{
+	background-image:url(../img/icons/icon_dryclean.png);
+	background-size:100%;
+}
+
+.fc-massage {
+	background-image:url(../img/icons/icon_massage.png);
+	background-size:100%;
+}
+
+.fc-carwash {
+	background-image:url(../img/icons/icon_carwash.png);
+	background-size:100%;
+}
+
+.fc-homeclean {
+	background-image:url(../img/icons/icon_homeclean.png);
+	background-size:100%;
+}
+
+.fc-babysitting {
+	background-image:url(../img/icons/icon_babysitting.png);
+	background-size:100%;
+}
+
+.fc-carservice {
+	background-image:url(../img/icons/icon_carservice.png);
+	background-size:100%;
+}
+
+.fc-removal {
+	background-image:url(../img/icons/icon_removal.png);
+	background-size:100%;
+}
+
+.fc-buildingclean {
+	background-image:url(../img/icons/icon_service.png);
+	background-size:100%;
+}
+
+.fc-buildingservice {
+	background-image:url(../img/icons/icon_service.png);
+	background-size:100%;
+}
+
+.fc-takeaway {
+	background-image:url(../img/icons/icon_takeaway.png);
+	background-size:100%;
+}
+
+.fc-dogwalking{
+	background-image:url(../img/icons/icon_dogwalking.png);
+	background-size:100%;
+}
+
+.fc-personaltraining{
+	background-image:url(../img/icons/icon_personaltraining.png);
+	background-size:100%;
+}
+
+.fc-chiropractor{
+	background-image:url(../img/icons/icon_chiropractor.png);
+	background-size:100%;
+}
 	
 .fc-event-inner {
 	position: relative;
@@ -396,7 +467,7 @@ a.fc-event {
 ------------------------------------------------------------------------*/
 
 .fc-event-hori {
-	border-width: 1px 0;
+	/*border-width: 1px 0;*/
 	margin-bottom: 1px;
 	}
 	
@@ -467,19 +538,19 @@ a.fc-event {
 -----------------------------------------------------------------*/
 	
 .fc-corner-left .fc-event-inner {
-	border-left-width: 1px;
+	/*border-left-width: 1px;*/
 	}
 	
 .fc-corner-right .fc-event-inner {
-	border-right-width: 1px;
+	/*border-right-width: 1px;*/
 	}
 	
 .fc-corner-top .fc-event-inner {
-	border-top-width: 1px;
+	/*border-top-width: 1px;*/
 	}
 	
 .fc-corner-bottom .fc-event-inner {
-	border-bottom-width: 1px;
+	/*border-bottom-width: 1px;*/
 	}
 	
 	
@@ -725,16 +796,16 @@ input.date-picker{
 #ads{
 	width:738px;
 	height:300px;
-	margin:30px auto 0;
-}
-#calendar{
-	width:600px;
-	height:490px;
 	margin:0 auto;
 }
-#calendar td{
-	background:#ffffff;
+#calendar{
+	width:738px;
+	height:605px;
+	margin:0 auto;
 }
 #calendar td.disabled{
 	background:#EEEEEE;
+}
+#resident-list .ui-body{
+	margin-bottom:5px;
 }

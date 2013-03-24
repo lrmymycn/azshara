@@ -28,10 +28,9 @@
 	<string>cloud</string>
 	<key>ExternalHosts</key>
 	<array>
+		<string>shop.myer.com.au</string>
+		<string>www.myer.com.au</string>
 		<string>ibutler.webility.com.au</string>
-		<string>www.premiercabs.com.au</string>
-		<string>www.silverservice.com.au</string>
-		<string>www.taxiscombined.com.au</string>
 		<string>www.eatnow.com.au</string>
 		<string>www.menulog.com.au</string>
 		<string>www.dominos.com.au</string>

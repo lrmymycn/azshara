@@ -16,5 +16,6 @@ var zh = {
 	'Home Clean':'清洁',
 	'Car Services':'汽车服务',
 	'Baby Sitting':'保姆',
-	'Massage':'按摩'
+	'Massage':'按摩',
+	'Chiropractor':'正骨'
 }

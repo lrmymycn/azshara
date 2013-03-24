@@ -20,14 +20,13 @@
         	<div data-role="content">
         		<form id="form-dryclean" action="" method="post">
 					<ol>
-        				<li>Select your preferred date and time.</li>
-        				<li>Add the clothes you wish to clean.</li>
+        				<li>Add your clothes.</li>
         				<li>Click the Pay Now button and complete the payment as the instruction.</li>
         				<li>Put your clothes in the dry cleaning bags and leave it in the dry cleaning collection chute located at concierge desk.</li>
         			</ol>
-        			<ul data-role="listview" data-inset="true">
-						<li data-icon="gear"><a class="date-picker">Preferred Date<p class="ui-li-aside" id="text-datetime"></p></a><input type="date" data-role="none" class="date-picker"/></li>
-					</ul>
+					<h3>Date</h3>
+        			<span id="selected-date"></span>
+					<!--
 					<h3>Preferred Time</h3>
 					<fieldset data-role="controlgroup" data-inset="false">
 						<input type="radio" name="services" id="services-0" value="0" checked="checked" />
@@ -35,6 +34,7 @@
 						<input type="radio" name="services" id="services-1" value="1" />
 						<label for="services-1">Collect at 2 pm and return at 8 am next day</label>
 					</fieldset>	
+					-->
                     <h3>Items</h3>
                     <ul data-role="listview" data-inset="true" data-split-icon="delete" id="list-items">
 						

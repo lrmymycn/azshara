@@ -12,17 +12,22 @@
         <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
-        <div id="page-takeaway" data-role="page" data-theme="c">
+        <div id="page-carwash-booking" data-role="page" data-theme="c">
         	<div data-role="header" data-theme="b">
         		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Taxi</h1>
+        		<h1>Car Wash</h1>
         	</div>
         	<div data-role="content">
-        		<div class="ui-grid-b" id="list-takeaway">
-					<div class="ui-block-a"><div class="rounded"><a href="mtaxi://mtaxi.com.au/resync.do" target="_blank"><img src="img/taxi/silverservice.jpg" width="200" height="100"/></a></div></div>
-					<!--<div class="ui-block-b"><div class="rounded"><a href="http://www.taxiscombined.com.au" target="_blank"><img src="img/taxi/mytaxi.jpg" width="200" height="100"/></a></div></div>
-					<div class="ui-block-c"><div class="rounded"><a href="http://www.premiercabs.com.au" target="_blank"><img src="img/taxi/premier.jpg" width="200" height="100"/></a></div></div>-->
-				</div>
+        		<form id="form-cleaner" action="" method="post">
+        			<h3>Date and Time</h3>
+        			<span id="selected-date"></span>
+					<h3>Services</h3>
+					<span id="selected-service">Loading...</span>
+					<h3>Note</h3>
+        			<span id="comment">Loading...</span>
+        			<h2>Total: $<span class="total"></span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-cancel">Cancel Booking</a>
+        		</form>
         	</div><!-- /content -->
         </div>
     </body>

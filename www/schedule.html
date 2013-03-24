@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=device-dpi" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <title>iBulter</title>
         <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -12,8 +12,14 @@
         <script type="text/javascript" src="js/main.js"></script>  
     </head>
     <body>
-        <div data-role="page" data-theme="c">
-
+        <div id="page-schedule" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a data-rel="back" data-icon="arrow-l">Back</a>
+        		<h1>Schedule</h1>
+        	</div>
+        	<div data-role="content">
+        		<div id="schedule-calendar"></div>
+        	</div><!-- /content -->      	
         </div>
     </body>
 </html>

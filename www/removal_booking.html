@@ -12,21 +12,22 @@
         <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
-        <div id="page-login" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="c">
-        		<h1>Login</h1>
+        <div id="page-removal-booking" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>House Removal</h1>
         	</div>
         	<div data-role="content">
-        		<form id="form-login" action="" method="post">
-        			<div data-role="fieldcontain">
-    					<label for="unit">Unit:</label>
-    					<input type="text" name="unit" id="unit" class="required" value=""  />
-					</div>
-					<div data-role="fieldcontain">
-    					<label for="password">Password:</label>
-    					<input type="password" name="password" id="password" class="required" value=""  />
-					</div>
-        			<input type="submit" value="Submit" id="submit-login"/>
+        		<form id="form-cleaner" action="" method="post">
+        			<h3>Date</h3>
+        			<span id="selected-date"></span>
+        			<h3>Preferred Time</h3>
+        			<span id="selected-time"></span>
+					<h3>Contact</h3>
+					<span id="selected-contact">Loading...</span>
+					<h3>Note</h3>
+        			<span id="comment">Loading...</span><br/>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-cancel">Cancel Booking</a>
         		</form>
         	</div><!-- /content -->
         </div>

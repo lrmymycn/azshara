@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/head.load.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>      
+    </head>
+    <body>
+        <div id="page-carservice" data-role="page" data-theme="c">
+        	<div data-role="header" data-theme="b" data-position="fixed">
+        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
+        		<h1>Car Services</h1>
+        	</div>
+        	<div data-role="content">
+        		<form id="form-carservice" action="" method="post">
+        			<ol>
+        				<li>Select your contact.</li>
+        				<li>Click Book button and our stuff will contact you shortly.</li>
+        			</ol>
+        			<h3>Date</h3>
+        			<span id="selected-date"></span>
+        			<h3>Preferred Time</h3>
+        			<fieldset id="time-list" data-role="controlgroup" data-inset="false">
+						Loading...
+					</fieldset>	
+        			<h3>Contact</h3>
+        			<fieldset id="contact-list" data-role="controlgroup" data-inset="false">
+						Loading...
+					</fieldset>
+					<h3>Car Details</h3>
+					<div data-role="fieldcontain">
+						<label for="vehiclemake">Vehicle Make *:</label>
+						<select name="vehiclemake" id="vehiclemake" class="required">
+							<option value="">Choose car</option>
+							<option value="Audi">Audi</option>
+							<option value="Alfa Romeo">Alfa Romeo</option>
+							<option value="BMW">BMW</option>
+							<option value="Chrysler">Chrysler</option>
+							<option value="Citroen">Citroen</option>
+							<option value="Daewoo">Daewoo</option>
+							<option value="Daihatsu">Daihatsu</option>
+							<option value="Ford">Ford</option>
+							<option value="Great Wall">Great Wall</option>
+							<option value="Holden">Holden</option>
+							<option value="Honda">Honda</option>
+							<option value="Hyundai">Hyundai</option>
+							<option value="Jaguar">Jaguar</option>
+							<option value="Jeep">Jeep</option>
+							<option value="Kia">Kia</option>
+							<option value="Land Rover">Land Rover</option>
+							<option value="Lexus">Lexus</option>
+							<option value="Mazda">Mazda</option>
+							<option value="Mercedes">Mercedes</option>
+							<option value="Mitsubishi">Mitsubishi</option>
+							<option value="Nissan">Nissan</option>
+							<option value="Peugeot">Peugeot</option>
+							<option value="Proton">Proton</option>
+							<option value="Renault">Renault</option>
+							<option value="Saab">Saab</option>
+							<option value="Seat">Seat</option>
+							<option value="Ssangyong">Ssangyong</option>
+							<option value="Subaru">Subaru</option>
+							<option value="Suzuki">Suzuki</option>
+							<option value="Toyota">Toyota</option>
+							<option value="Volkswagen">Volkswagen</option>
+							<option value="Volvo">Volvo</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+					<div data-role="fieldcontain">
+						<fieldset data-role="controlgroup" data-type="horizontal">
+							<legend>Transmission:</legend>
+							<input type="radio" name="transmission" id="manual" value="true" checked="checked" />
+							<label for="manual">Manual</label>					
+							<input type="radio" name="transmission" id="automatic" value="false"  />
+							<label for="automatic">Automatic</label>
+						</fieldset>
+					</div>
+					<div data-role="fieldcontain">
+						<label for="model">Model *:</label>
+						<input type="text" name="model" id="model" value="" class="required" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="fueltype">Fuel Type:</label>
+						<select name="fueltype" id="fueltype">
+							<option value="Unleaded">Unleaded</option>
+							<option value="Diesel">Diesel</option>
+							<option value="LPG">LPG</option>
+						</select>
+					</div>
+					<div data-role="fieldcontain">
+						<label for="year">Year of Manufacture *:</label>
+						<input type="text" name="year" id="manuyear" value="" class="required" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="rego">Rego:</label>
+						<input type="text" name="rego" id="rego" value=""  />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="enginesize">Engine size:</label>
+						<input type="text" name="enginesize" id="enginesize" value=""  />
+					</div>
+        			<div data-role="fieldcontain" class="ui-hide-label">
+						<label for="comment">Additional Information</label>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
+        			</div>
+        			<input type="submit" value="Book Now" data-inline="true" id="btn-carservice" data-theme="b" />
+        		</form>
+        	</div><!-- /content -->
+        </div>
+    </body>
+</html>

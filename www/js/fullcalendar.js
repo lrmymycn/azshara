@@ -3739,7 +3739,6 @@ function AgendaEventRenderer() {
 	// renders events in the 'time slots' at the bottom
 	
 	function renderSlotSegs(segs, modifiedEventId) {
-	
 		var i, segCnt=segs.length, seg,
 			event,
 			classes,
@@ -3875,6 +3874,7 @@ function AgendaEventRenderer() {
 	
 	
 	function slotSegHtml(event, seg) {
+		console.log('1');
 		var html = "<";
 		var url = event.url;
 		var skinCss = getSkinCss(event, opt);
@@ -4519,10 +4519,14 @@ function DayEventRenderer() {
 		var rowI;
 		var levelI;
 		var colHeights;
+		var colWidths;
+		var colCounter;
 		var j;
 		var segCnt = segs.length;
 		var seg;
 		var top;
+		var left;
+		var counter;
 		var k;
 		segmentContainer[0].innerHTML = daySegHTML(segs); // faster than .html()
 		daySegElementResolve(segs, segmentContainer.children());
@@ -4536,16 +4540,30 @@ function DayEventRenderer() {
 		for (rowI=0; rowI<rowCnt; rowI++) {
 			levelI = 0;
 			colHeights = [];
+			colWidths = [];
+			colCounter = [];
 			for (j=0; j<colCnt; j++) {
 				colHeights[j] = 0;
+				colWidths[j] = 0;
+				colCounter[j] = 0;
 			}
 			while (i<segCnt && (seg = segs[i]).row == rowI) {
 				// loop through segs in a row
 				top = arrayMax(colHeights.slice(seg.startCol, seg.endCol));
+				left = arrayMax(colWidths.slice(seg.startCol, seg.endCol));
+				counter = arrayMax(colCounter.slice(seg.startCol, seg.endCol));
 				seg.top = top;
-				top += seg.outerHeight;
+				seg.left += left;
+				left += seg.outerWidth;
+
+				if(counter > 0 && counter % 3 == 0){
+					top += seg.outerHeight;
+					left = 0;
+				}
 				for (k=seg.startCol; k<seg.endCol; k++) {
 					colHeights[k] = top;
+					colWidths[k] = left;
+					colCounter[k] = colCounter[k] + 1;
 				}
 				i++;
 			}
@@ -4669,7 +4687,9 @@ function DayEventRenderer() {
 			html +=
 				"</" + (url ? "a" : "div" ) + ">";
 			seg.left = left;
-			seg.outerWidth = right - left;
+			//Hardcode outer width
+			//seg.outerWidth = right - left;
+			seg.outerWidth = 25;
 			seg.startCol = leftCol;
 			seg.endCol = rightCol + 1; // needs to be exclusive
 		}
@@ -4840,6 +4860,7 @@ function DayEventRenderer() {
 			element = seg.element;
 			if (element) {
 				element[0].style.top = rowTops[seg.row] + (seg.top||0) + 'px';
+				element[0].style.left = (seg.left||0) + 'px';
 				event = seg.event;
 				trigger('eventAfterRender', event, event, element);
 			}
@@ -5216,5 +5237,6 @@ function HorizontalPositionCache(getElement) {
 	};
 	
 }
+
 
 })(jQuery);

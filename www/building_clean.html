@@ -9,39 +9,31 @@
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <script type="text/javascript" src="cordova-2.2.0.js"></script>
         <script type="text/javascript" src="js/head.load.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script> 
+        <script type="text/javascript" src="js/main.js"></script>      
     </head>
     <body>
-        <div id="page-massage" data-role="page" data-theme="c">
+        <div id="page-buildingclean" data-role="page" data-theme="c">
         	<div data-role="header" data-theme="b" data-position="fixed">
         		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Massage</h1>
+        		<h1>Building Clean</h1>
         	</div>
         	<div data-role="content">
-        		<form id="form-massage" action="" method="post">
+        		<form id="form-buildingclean" action="" method="post">
         			<ol>
-        				<li>Select your preferred time.</li>
-        				<li>Click the Pay Now button and complete the payment as the instruction.</li>
+        				<li>Select your contact.</li>
+        				<li>Click Book button and our stuff will contact you shortly.</li>
         			</ol>
         			<h3>Date</h3>
         			<span id="selected-date"></span>
-        			<h3>Masseur</h3>
-        			<select name="person" id="people">
-					</select>
-        			<h3>Select Time</h3>				
-					<select name="timesegments" class="required" id="timesegments" multiple="multiple" data-native-menu="false" data-icon="grid">
-						
-					</select>
-					<h3>Services</h3>
-					<fieldset id="service-list" data-role="controlgroup" data-inset="false">
+        			<h3>Contact</h3>
+        			<fieldset id="contact-list" data-role="controlgroup" data-inset="false">
 						Loading...
-					</fieldset>	
+					</fieldset>
         			<div data-role="fieldcontain" class="ui-hide-label">
 						<label for="comment">Additional Information</label>
-						<textarea name="comment" id="comment" placeholder="Additional Information"></textarea>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
         			</div>
-        			<h2>Total: $<span class="total">0</span></h2>
-        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Pay Now</a>
+        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Book Now</a>
         		</form>
         	</div><!-- /content -->
         </div>
