@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>iBulter</title>
+    </head>
+    <body>
+        <div id="page-restaurants" data-role="page" data-theme="c" data-add-back-btn="true">
+        	<div data-role="header" data-theme="c">
+        		<h1>Restaurants</h1>
+        	</div>
+        	<div data-role="content">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<input name="sort" id="sort-1" value="0" checked="checked" type="radio">
+					<label for="sort-1">Alphabet</label>
+					<input name="sort" id="sort-2" value="1" type="radio">
+					<label for="sort-2">Category</label>
+					<input name="sort" id="sort-3" value="2" type="radio">
+					<label for="sort-3">Popularity</label>
+				</fieldset>
+        		<ul data-role="listview" data-inset="true" data-autodividers="true" id="list-restaurants" data-divider-theme="a">
+        			
+        		</ul>
+        	</div><!-- /content -->
+        </div>
+    </body>
+</html>

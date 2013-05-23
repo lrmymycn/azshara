@@ -13,39 +13,30 @@
     </head>
     <body>
         <div id="page-dryclean" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b" data-position="fixed">
-        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Dry Clean</h1>
+        	<div data-role="header" data-theme="c" data-position="fixed">
+        		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
+        		<h1 data-translate="true">Dry Clean</h1>
+        		<a href="help.html" data-help="dryclean" data-icon="info" class="ui-btn-right" data-theme="c" data-translate="true">Help</a>
         	</div>
         	<div data-role="content">
         		<form id="form-dryclean" action="" method="post">
-					<ol>
-        				<li>Add your clothes.</li>
-        				<li>Click the Pay Now button and complete the payment as the instruction.</li>
-        				<li>Put your clothes in the dry cleaning bags and leave it in the dry cleaning collection chute located at concierge desk.</li>
-        			</ol>
-					<h3>Date</h3>
+					<h3 data-translate="true">Date</h3>
         			<span id="selected-date"></span>
-					<!--
-					<h3>Preferred Time</h3>
-					<fieldset data-role="controlgroup" data-inset="false">
-						<input type="radio" name="services" id="services-0" value="0" checked="checked" />
-						<label for="services-0">Collect at 8 am and return at 2 pm</label>
-						<input type="radio" name="services" id="services-1" value="1" />
-						<label for="services-1">Collect at 2 pm and return at 8 am next day</label>
-					</fieldset>	
-					-->
-                    <h3>Items</h3>
+        			<h3 data-translate="true">Contact</h3>
+        			<fieldset id="contact-list" data-role="controlgroup" data-inset="false">
+						Loading...
+					</fieldset>
+                    <h3 data-translate="true">Items</h3>
                     <ul data-role="listview" data-inset="true" data-split-icon="delete" id="list-items">
 						
 					</ul>
-                    <a href="dry_clean/categories.html" data-role="button" data-icon="plus" data-inline="true">Add Clothes</a> 
+                    <a href="dry_clean/categories.html" data-role="button" data-icon="plus" data-inline="true" data-translate="true">Add Clothes</a> 
         			<div data-role="fieldcontain" class="ui-hide-label">
 						<label for="comment">Additional Information</label>
 						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
         			</div>
-        			<h2>Total: $<span class="total">0</span></h2>
-        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Pay Now</a>
+        			<h2><span data-translate="true">Total</span>: $<span class="total">0</span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="c" class="btn-pay" data-translate="true">Pay Now</a>
         		</form>
         	</div><!-- /content -->
         </div>

@@ -9,21 +9,37 @@
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <script type="text/javascript" src="cordova-2.2.0.js"></script>
         <script type="text/javascript" src="js/head.load.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script> 
+        <script type="text/javascript" src="js/main.js"></script>    
     </head>
     <body>
         <div id="page-takeaway" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b">
-        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Takeaway</h1>
+        	<div data-role="header" data-theme="c" data-position="fixed">
+        		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
+        		<h1 data-translate="true">Take Away</h1>
+        		<a href="help.html" data-help="takeaway" data-icon="info" class="ui-btn-right" data-theme="c" data-translate="true">Help</a>
         	</div>
         	<div data-role="content">
-        		<div class="ui-grid-b" id="list-takeaway">
-					<div class="ui-block-a"><div class="rounded"><a href="http://www.pizzahut.com.au" target="_blank"><img src="img/takeaway/pizzahut.jpg" width="200" height="100"/></a></div></div>
-					<div class="ui-block-b"><div class="rounded"><a href="http://www.dominos.com.au" target="_blank"><img src="img/takeaway/dominos.jpg" width="200" height="100"/></a></div></div>
-					<div class="ui-block-c"><div class="rounded"><a href="http://www.eatnow.com.au" target="_blank"><img src="img/takeaway/eatnow.jpg" width="200" height="100"/></a></div></div>
-					<div class="ui-block-a"><div class="rounded"><a href="http://www.menulog.com.au" target="_blank"><img src="img/takeaway/menulog.jpg" width="200" height="100"/></a></div></div>
-				</div>
+        		<form id="form-takeaway" action="" method="post">
+					<h3 data-translate="true">Date</h3>
+        			<span id="selected-date"></span>
+					<h3 data-translate="true">Preferred Time</h3>
+					<input id="time" type="time" name="time" value=""/>
+					<h3 data-translate="true">Contact</h3>
+        			<fieldset id="contact-list" data-role="controlgroup" data-inset="false">
+						Loading...
+					</fieldset>
+                    <h3 data-translate="true">Meals</h3>
+                    <ul data-role="listview" data-inset="true" data-split-icon="delete" id="list-items">
+						
+					</ul>
+                    <a id="add-item" href="takeaway/restaurants.html" data-role="button" data-icon="plus" data-inline="true" class="ui-disabled" data-translate="true">Add Meal</a> 
+        			<div data-role="fieldcontain" class="ui-hide-label">
+						<label for="comment">Additional Information</label>
+						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
+        			</div>
+        			<h2><span data-translate="true">Total</span>: $<span class="total">0</span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="c" class="btn-pay" data-translate="true">Pay Now</a>
+        		</form>
         	</div><!-- /content -->
         </div>
     </body>

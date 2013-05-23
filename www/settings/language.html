@@ -8,9 +8,9 @@
     </head>
     <body>
         <div id="page-language" data-role="page" data-theme="c" data-add-back-btn="true">
-        	<div data-role="header" data-theme="b">
-        		<h1>Language</h1>
-        		<a href="#" data-icon="check" class="ui-btn-right" id="btn-save">Save</a>
+        	<div data-role="header" data-theme="c">
+        		<h1 data-translate="true">Language</h1>
+        		<a href="#" data-icon="check" class="ui-btn-right" id="btn-save" data-translate="true">Save</a>
         	</div>
         	<div data-role="content">
 				<fieldset data-role="controlgroup" data-inset="false">
@@ -19,6 +19,12 @@
 				
 					<input type="radio" name="language" id="language-1" value="zh" />
 					<label for="language-1">中文</label>
+					
+					<input type="radio" name="language" id="language-2" value="kr" />
+					<label for="language-2">한국의</label>
+					
+					<input type="radio" name="language" id="language-3" value="jp" />
+					<label for="language-3">日本語</label>
 				</fieldset>	
         	</div><!-- /content -->
         </div>

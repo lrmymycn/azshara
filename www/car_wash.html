@@ -13,19 +13,16 @@
     </head>
     <body>
         <div id="page-carwash" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b">
-        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Car Wash</h1>
+        	<div data-role="header" data-theme="c" data-position="fixed">
+        		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
+        		<h1 data-translate="true">Car Wash</h1>
+        		<a href="help.html" data-help="carwash" data-icon="info" class="ui-btn-right" data-theme="c" data-translate="true">Help</a>
         	</div>
         	<div data-role="content">
         		<form id="form-carwash" action="" method="post">
-        			<ol>
-        				<li>Select your preferred time.</li>
-        				<li>Click the Pay Now button and complete the payment as the instruction.</li>
-        			</ol>
-        			<h3>Date</h3>
+        			<h3 data-translate="true">Date</h3>
         			<span id="selected-date"></span>
-        			<h3>Select Time</h3>
+        			<h3 data-translate="true">Select Time</h3>
         			<fieldset data-role="controlgroup" data-inset="false">
 						<input type="radio" name="time" id="time-0" value="9" checked="checked" />
 						<label for="time-0">9:00 AM</label>
@@ -51,7 +48,7 @@
 						<input type="radio" name="time" id="time-7" value="16" />
 						<label for="time-7">4:00 PM</label>
 					</fieldset>
-					<h3>Services</h3>
+					<h3 data-translate="true">Services</h3>
 					<fieldset id="service-list" data-role="controlgroup" data-inset="false">
 						Loading...
 					</fieldset>	
@@ -59,8 +56,8 @@
 						<label for="comment">Additional Information</label>
 						<textarea name="comment" id="comment" class="required" placeholder="Additional Information"></textarea>
         			</div>
-        			<h2>Total: $<span class="total">0</span></h2>
-        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-pay">Pay Now</a>
+        			<h2><span data-translate="true">Total</span>: $<span class="total">0</span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="c" class="btn-pay" data-translate="true">Pay Now</a>
         		</form>
         	</div><!-- /content -->
         </div>

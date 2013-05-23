@@ -8,14 +8,20 @@
     </head>
     <body>
         <div id="page-store-categories" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b" data-position="fixed">
-        		<a href="javascript:;" id="btn-back" data-icon="arrow-l">Back</a>
+        	<div data-role="header" data-theme="c" data-position="fixed">
+        		<a href="javascript:;" id="btn-back" data-icon="arrow-l" data-translate="true">Back</a>
         		<h1 id="title"></h1>
         	</div>
         	<div data-role="content">
         		<form target="_blank" method="get" action="http://www2.woolworthsonline.com.au/Shop/SearchProducts">
         			<input name="search" id="store-search" value="" placeholder="Search all products" type="search">
-        		</form>				
+        		</form>	
+        		<div>
+        			<span data-translate="true">Most popular search</span>: <a href="http://www2.woolworthsonline.com.au/Shop/SearchProducts?search=Milk" target="_blank">Milk</a> 
+        			<a href="http://www2.woolworthsonline.com.au/Shop/SearchProducts?search=Cheese" target="_blank">Cheese</a>
+        			<a href="http://www2.woolworthsonline.com.au/Shop/SearchProducts?search=Bread" target="_blank">Bread</a>
+        			<a href="http://www2.woolworthsonline.com.au/Shop/SearchProducts?search=Eggs" target="_blank">Eggs</a>
+        		</div>			
         		<ul data-role="listview" data-split-theme="d" data-inset="true" id="list-categories">
         			
         		</ul>

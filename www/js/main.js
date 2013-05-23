@@ -10,8 +10,9 @@ head.js("js/jquery.js", "js/jquery-ui.min.js", "js/jquery.mobile.js", "js/jquery
 var Main = {
 	unit:'',
 	password:'',
-	test:true,
+	test:false,
 	apiRoot:'http://ibutler.webility.com.au/',
+	autoHomeRoot:'http://admin:admin@192.168.1.15/',
 	serviceDateTime:null,
 	currentService:null,
 	currentEvent:null,
@@ -19,10 +20,15 @@ var Main = {
 	price:null,
 	people:null,
 	init:function(){
+		$('[data-role="page"]').live('pagecreate', function(){
+			Language.translate();
+		});
+		
 		$(document).ready(function(){
 			Main.loadConfig();
 			Main.getLoginStatus();
 			Home.init();
+			AutoHome.init();
 			Store.init();
 			DryClean.init();
 			CarWash.init();
@@ -38,12 +44,16 @@ var Main = {
 			BuildingClean.init();
 			BuildingService.init();
 			ServiceLookup.init();
+			TakeAway.init();
+			Help.init();
 		});
 	},
 	loadConfig:function(){
 		$.support.cors = true;
 		$.mobile.allowCrossDomainPages = true;
+		$.mobile.touchOverflowEnabled = true;
 		$.mobile.defaultPageTransition = 'slide';
+		$.mobile.page.prototype.options.backBtnText = _("Back");
 		$.ajaxSetup({
 			headers: { "cache-control": "no-cache" }
 		});		
@@ -65,7 +75,7 @@ var Main = {
 		}
 	},
 	loadService:function(){
-		$('#selected-date').text(Main.serviceDateTime.toString('dddd, d MMMM yyyy'));
+		$('#selected-date').text(_date(Main.serviceDateTime.toString('dddd , d MMMM yyyy')));
 		
 		if(Main.currentService == null){
 			return;
@@ -368,7 +378,7 @@ var Main = {
 	},
 	loadBooking: function(){
 		var event = Main.currentEvent;
-		$('#selected-date').text(event.start.toString('dddd, d MMMM yyyy hh:mm tt'));
+		$('#selected-date').text(_date(event.start.toString('dddd , d MMMM yyyy hh:mm tt')));
 		if(Main.currentService == null){
 			return;
 		}
@@ -388,6 +398,7 @@ var Main = {
 				}
 				$('#selected-time').html(response.preferredTime);
 				$('#selected-contact').html(response.name + ' ' + response.email + ' ' + response.mobile);
+				$('#selected-person').html(response.person);
 				$('#comment').html(response.comment);
 				$('span.total').text(response.price);
 			},
@@ -431,6 +442,12 @@ var Main = {
 			});
 
 		});
+	},
+	callSceneControl: function(id){
+		$.ajax({
+			type: 'GET',
+			url: Main.autoHomeRoot + 'api/sceneControl?id=' + id + '&action=start'
+		});
 	}
 }
 
@@ -441,18 +458,8 @@ var Home = {
 			
 			//Home.slider();	
 			Tools.initHomeCalendar();
-			
-			$('#menu-grocery').text(_('Grocery'));
-			$('#menu-takeaway').text(_('Takeaway'));
-			$('#menu-taxi').text(_('Taxi'));
-			$('#menu-dry-clean').text(_('Dry Clean'));
-			$('#menu-car-wash').text(_('Car Wash'));
-			$('#menu-home-clean').text(_('Home Clean'));
-			$('#menu-car-services').text(_('Car Services'));
-			$('#menu-baby-sitting').text(_('Baby Sitting'));
-			$('#menu-massage').text(_('Massage'));
-			
 			Home.initFooterLinks();
+			Home.initAutoHome();
 		});
 	},
 	slider:function(){
@@ -468,6 +475,54 @@ var Home = {
 				Store.currentCategoryId = 0;
 			}
 			$.mobile.changePage('store/categories.html');
+		});
+	},
+	initAutoHome:function(){	
+		$('#autohome a').click(function(){
+			var id = $(this).data('scene');
+			switch(id){
+				case 6:
+					$('#autohome a[data-scene="6"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="7"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+					break;
+				case 7:
+					$('#autohome a[data-scene="6"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
+					$('#autohome a[data-scene="7"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					break;
+				case 8:
+					$('#autohome a[data-scene="8"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="9"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+					break;
+				case 9:
+					$('#autohome a[data-scene="8"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
+					$('#autohome a[data-scene="9"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					break;
+				case 10:
+					$('#autohome a[data-scene="10"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="11"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+					break;
+				case 11:
+					$('#autohome a[data-scene="10"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
+					$('#autohome a[data-scene="11"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					break;
+			}
+
+			Main.callSceneControl(id);
+		});
+		
+		$.ajax({
+			type: 'GET',
+			url: Main.autoHomeRoot + '/api/weather',
+			dataType: "json",
+			success: function (response) {
+				var temp = response.Temperature;
+				var hum = response.Humidity;
+				var wind = response.Wind;
+				
+				$('#temp-val').html(temp + '&deg;C');
+				$('#hum-val').html(hum + '%');
+				$('#wind-val').html(wind + 'km/h');
+			}
 		});
 	}
 }
@@ -485,7 +540,7 @@ var Store = {
 				url: Main.apiRoot + 'store/?id=' + Store.storeId + '&categoryId=' + Store.currentCategoryId,
 				dataType: "json",
 				success: function (response) {
-					$('#title').text(response.name);
+					$('#title').text(_(response.name));
 					
 					if(response.parentCategory != null){
 						Store.parentCategoryId = response.parentCategory.id;
@@ -562,6 +617,7 @@ var Cleaner = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();			
 		});
@@ -582,7 +638,7 @@ var DryClean = {
 		
 		$('#page-dryclean').live('pageshow', function(){
 			Main.currentService = 'dryclean';
-			$('#selected-date').text(Main.serviceDateTime.toString('dddd, d MMMM yyyy'));			
+			$('#selected-date').text(_date(Main.serviceDateTime.toString('dddd , d MMMM yyyy')));			
 			for(var i = 0; i < DryClean.items.length; i++){
 				$li = $('<li data-icon="minus"><a href="#" data-theme="c" data-index="' + i + '">' + DryClean.items[i].category + ' - ' + DryClean.items[i].service + '<span class="ui-li-count">' + DryClean.items[i].num + '</span><p class="ui-li-aside">$' + DryClean.items[i].price.toFixed(2) + '</p></a></li>');
 				$li.find('a').click(function(){
@@ -597,6 +653,7 @@ var DryClean = {
 			}
 			$('#list-items').listview('refresh');
 			DryClean.updateTotal();			
+			Main.loadContacts();
 						
 			$('.btn-pay').unbind().click(function(){
 				if(Main.loading){
@@ -607,10 +664,6 @@ var DryClean = {
 					return;
 				}
 				var datetimeStr = Main.serviceDateTime.toString('yyyy-MM-ddTHH:mm:ss');
-				var serviceId = $('input[name="services"]:checked').val();
-				if(serviceId == undefined){
-					serviceId = 0;
-				}
 				var comment = $('#comment').val();
 				var dryCleans = '';
 				for(var i = 0; i < DryClean.items.length; i++){
@@ -619,7 +672,11 @@ var DryClean = {
 				if(dryCleans.length > 0){
 					dryCleans = dryCleans.substr(0, dryCleans.length -1);
 				}
-				console.log('{"preferredTime":' + serviceId + ', "date":"' + datetimeStr + '", "comment":"' + comment +'", "dryCleans": [' + dryCleans + ']}');
+				var residentId = $('input[name="contact"]:checked').val();
+				if(residentId == undefined){
+					residentId = 0;
+				}
+				console.log('{"date":"' + datetimeStr + '", "comment":"' + comment +'", "dryCleans": [' + dryCleans + ']}');
 				Main.loading = true;
 				$.mobile.loading('show');
 				$.ajax({
@@ -630,7 +687,7 @@ var DryClean = {
 					beforeSend: function (request) {
 						request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
 					},
-					data: '{"preferredTime":' + serviceId + ', "date":"' + datetimeStr + '", "comment":"' + comment +'", "dryCleans": [' + dryCleans + ']}',
+					data: '{"date":"' + datetimeStr + '", "residentId":' + residentId + ', "comment":"' + comment +'", "dryCleans": [' + dryCleans + ']}',
 					success: function (response) {
 						$.mobile.changePage('home.html', {reverse: true});
 					},
@@ -649,7 +706,7 @@ var DryClean = {
 			Main.currentService = 'dryclean';
 			
 			var event = Main.currentEvent;
-			$('#selected-date').text(event.start.toString('dddd, d MMMM yyyy'));
+			$('#selected-date').text(_date(event.start.toString('dddd , d MMMM yyyy')));
 			if(Main.currentService == null){
 				return;
 			}
@@ -668,7 +725,7 @@ var DryClean = {
 					for(var i = 0; i < dryCleans.length; i++){
 						dryCleanList += dryCleans[i].name + ' x ' + dryCleans[i].num + ' = $' + dryCleans[i].price + '<br/>';
 					}
-					$('#selected-time').html('Collect at 8 am and return at 2 pm');
+					$('#selected-contact').html(response.name + ' ' + response.email + ' ' + response.mobile);
 					$('#dryclean-list').html(dryCleanList);
 					$('#comment').html(response.comment);
 					$('span.total').text(response.price);
@@ -783,11 +840,315 @@ var DryClean = {
 	}
 }
 
+var TakeAway = {
+	items:null,
+	currentTime:null,
+	currentTimeInMinutes:0,
+	currentFilter:0,
+	currentRestauran:'',
+	currentRestaurantId:0,
+	currentCategory: '',
+	currentCategoryId:0,
+	init: function(){
+		TakeAway.items = [];
+		
+		$('#page-takeaway').live('pageshow', function(){
+			Main.currentService = 'takeaway';
+			$('#selected-date').text(_date(Main.serviceDateTime.toString('dddd , d MMMM yyyy')));
+			
+			if(TakeAway.currentTime != null){
+				$('#time').val(TakeAway.currentTime);
+				$('#add-item').removeClass('ui-disabled');
+			}
+			
+			$('#time').unbind().change(function(){
+				var time = $(this).val();
+				if(time != ''){
+					var segs = time.split(':');
+					var hours = parseInt(segs[0]);
+					var minutes = parseInt(segs[1]);
+					
+					TakeAway.currentTime = time;
+					TakeAway.currentTimeInMinutes = hours * 60 + minutes;
+					
+					Main.serviceDateTime.addHours(hours);
+					Main.serviceDateTime.addMinutes(minutes);
+					
+					$('#add-item').removeClass('ui-disabled');
+				}
+			});
+							
+			for(var i = 0; i < TakeAway.items.length; i++){
+				$li = $('<li data-icon="minus"><a href="#" data-theme="c" data-index="' + i + '">' +  TakeAway.items[i].restaurant + ' - ' + TakeAway.items[i].category + ' - ' + TakeAway.items[i].dish + '<span class="ui-li-count">' + TakeAway.items[i].num + '</span><p class="ui-li-aside">$' + TakeAway.items[i].price.toFixed(2) + '</p></a></li>');
+				$li.find('a').click(function(){
+					var index = $(this).data('index');
+					TakeAway.items.splice(index, 1);
+					$(this).parents('li').remove();
+					
+					$('#list-items').listview('refresh');					
+					TakeAway.updateTotal();
+				});
+				$('#list-items').append($li);
+			}
+			$('#list-items').listview('refresh');
+			TakeAway.updateTotal();
+			Main.loadContacts();
+						
+			$('.btn-pay').unbind().click(function(){
+				if(Main.loading){
+					return;
+				}
+				
+				if(TakeAway.items.length == 0){
+					return;
+				}
+				var datetimeStr = Main.serviceDateTime.toString('yyyy-MM-ddTHH:mm:ss');
+				var comment = $('#comment').val();
+				var takeAways = '';
+				for(var i = 0; i < TakeAway.items.length; i++){
+					takeAways += '{"dishId":' + TakeAway.items[i].dishId + ', "num":' + TakeAway.items[i].num + '},';
+				}
+				if(takeAways.length > 0){
+					takeAways = takeAways.substr(0, takeAways.length -1);
+				}
+				var residentId = $('input[name="contact"]:checked').val();
+				if(residentId == undefined){
+					residentId = 0;
+				}
+				console.log('{"date":"' + datetimeStr + '", "comment":"' + comment +'", "takeAways": [' + takeAways + ']}');
+				Main.loading = true;
+				$.mobile.loading('show');
+				$.ajax({
+					type: 'POST',
+					contentType: 'application/json',
+					url: Main.apiRoot + Main.currentService + '/book',
+					dataType: "json",
+					beforeSend: function (request) {
+						request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+					},
+					data: '{"date":"' + datetimeStr + '", "time":' + TakeAway.currentTimeInMinutes + ', "residentId":' + residentId + ', "comment":"' + comment +'", "takeAways": [' + takeAways + ']}',
+					success: function (response) {
+						$.mobile.changePage('home.html', {reverse: true});
+					},
+					error: function (request, status, error) {
+						console.log(request.responseText);
+					},
+					complete:function(){
+						Main.loading = false;
+						$.mobile.loading('hide');
+					}
+				});
+			});
+		});
+		
+		$('#page-takeaway-booking').live('pageshow', function(){
+			Main.currentService = 'takeaway';
+			
+			var event = Main.currentEvent;
+			$('#selected-date').text(_date(event.start.toString('dddd , d MMMM yyyy hh:mm tt')));
+
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + Main.currentService + '/?id=' + event.id,
+				dataType: "json",
+				beforeSend: function (request) {
+					request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+				},
+				success: function (response) {
+					console.log(response);
+					var takeAways = response.takeAways;
+					var takeAwaysList = '';
+					for(var i = 0; i < takeAways.length; i++){
+						takeAwaysList += takeAways[i].name + ' x ' + takeAways[i].num + ' = $' + takeAways[i].price + '<br/>';
+					}
+					$('#selected-contact').html(response.name + ' ' + response.email + ' ' + response.mobile);
+					$('#takeaway-list').html(takeAwaysList);
+					$('#comment').html(response.comment);
+					$('span.total').text(response.price);
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});
+			
+			Main.initCancelButton();
+		});
+		
+		TakeAway.initRestaurant();
+		TakeAway.initCategories();
+		TakeAway.initDishes();
+	},
+	initRestaurant:function(){
+		$('#page-restaurants').live('pageshow', function(){
+			$('input[name="sort"]').change(function(){
+				TakeAway.currentFilter = parseInt($(this).val());
+				TakeAway.sortRestaurants();
+			});
+		
+			var restaurants = null;
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'POST',
+				contentType: 'application/json',
+				url: Main.apiRoot + 'takeaway/restaurants',
+				dataType: "json",
+				data: '{"deliverTime":' + TakeAway.currentTimeInMinutes + '}',
+				success: function (response) {
+					restaurants = response;
+					if(restaurants != null && restaurants.length > 0){
+						$('#list-restaurants').empty();
+						
+						for(var i = 0; i < restaurants.length; i++){
+							var $li = $('<li data-type="' + restaurants[i].type + '" data-popularity="' + restaurants[i].popularity + '"><a href="categories.html" data-id="' + restaurants[i].id + '">'+ restaurants[i].name + '</a></li>');
+							$li.find('a').click(function(){
+								TakeAway.currentRestaurant = $(this).text();
+								TakeAway.currentRestaurantId = $(this).data('id');
+							});
+							$('#list-restaurants').append($li);
+						}
+						
+						TakeAway.sortRestaurants();
+					}
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});	
+		});
+	},
+	sortRestaurants:function(){
+		$('#list-restaurants').listview({
+			autodividersSelector: function(li){
+				var out = null;
+				switch(TakeAway.currentFilter){
+					case 0:
+						out = $(li).find('a').text().charAt(0);
+						break;
+					case 1:
+						out = $(li).data('type');
+						break;
+					case 2:
+						out = $(li).data('popularity');
+						break;
+				}
+				return out;
+			}
+		});
+		
+		$('#list-restaurants').listview('refresh');
+	},
+	initCategories:function(){
+		$('#page-restaurant-categories').live('pageshow', function(){
+			$('#text-restaurant').text(TakeAway.currentRestaurant);			
+			var categories = null;
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + 'takeaway/categories/' + TakeAway.currentRestaurantId,
+				dataType: "json",
+				success: function (response) {
+					categories = response;
+					if(categories != null && categories.length > 0){
+						$('#list-categories').empty();
+						
+						for(var i = 0; i < categories.length; i++){
+							var $li = $('<li><a href="dishes.html" data-id="' + categories[i].id + '">'+ categories[i].name + '</a></li>');
+							$li.find('a').click(function(){
+								TakeAway.currentCategory = $(this).text();
+								TakeAway.currentCategoryId = $(this).data('id');
+							});
+							$('#list-categories').append($li);
+						}
+						
+						$('#list-categories').listview('refresh');
+					}
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});		
+		});
+	},
+	initDishes:function(){
+		$('#page-dishes').live('pageshow', function(){
+			$('#text-category').text(TakeAway.currentCategory);
+			var currentService = '';
+			var currentServiceId = 0;
+			var currentUnitPrice = 0;
+			
+			var dishes = null;
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + 'takeaway/dishes/' + TakeAway.currentCategoryId,
+				dataType: "json",
+				success: function (response) {
+					dishes = response;
+					if(dishes != null && dishes.length > 0){
+						$('#list-dishes').empty();
+						
+						for(var i = 0; i < dishes.length; i++){
+							var $li = $('<li data-icon="add"><a href="#popup-quantity" data-id="' + dishes[i].id + '" data-name="' + dishes[i].name + '" data-price="' + dishes[i].price + '" data-position-to="window" data-rel="popup">'+ dishes[i].name + '<p class="ui-li-aside">$' + dishes[i].price.toFixed(2) + '</p></a></li>');
+							$li.find('a').click(function(){
+								currentService = $(this).data('name');
+								currentServiceId = $(this).data('id');
+								currentUnitPrice = $(this).data('price');
+							});
+							$('#list-dishes').append($li);
+						}
+						
+						$('#list-dishes').listview('refresh');
+					}
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});			
+			
+			$('.btn-quantity').click(function(){
+				var num = $('#popup-quantity input[name="quantity"]').val();
+				var price = currentUnitPrice * num;
+				var item = {restaurantId:TakeAway.currentRestaurantId, restaurant:TakeAway.currentRestaurant,categoryId:TakeAway.currentCategoryId, category:TakeAway.currentCategory, dishId:currentServiceId, dish:currentService, price:price, num:num};
+				TakeAway.items.push(item);
+				$.mobile.changePage('../takeaway.html', {reverse: true});
+			});
+		});
+	},
+	updateTotal : function(){
+		var total = 0;
+		for(var i = 0; i < TakeAway.items.length; i++){
+			total += TakeAway.items[i].price;
+		}
+		$('.total').text(total.toFixed(2));
+	}
+}
+
 var CarServices = {
 	init:function(){
 		$('#page-carservice').live('pageshow', function(){
 			Main.currentService = 'carservice';
-			$('#selected-date').text(Main.serviceDateTime.toString('dddd, d MMMM yyyy'));
+			$('#selected-date').text(_date(Main.serviceDateTime.toString('dddd , d MMMM yyyy')));
 			
 			Main.loadTime();
 			Main.loadContacts();
@@ -843,7 +1204,7 @@ var CarServices = {
 		$('#page-carservice-booking').live('pageshow', function(){
 			Main.currentService = 'carservice';
 			var event = Main.currentEvent;
-			$('#selected-date').text(event.start.toString('dddd, d MMMM yyyy'));
+			$('#selected-date').text(_date(event.start.toString('dddd , d MMMM yyyy')));
 			Main.loading = true;
 			$.mobile.loading('show');
 			$.ajax({
@@ -892,6 +1253,7 @@ var BabySitting = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();		
 		});
@@ -915,6 +1277,7 @@ var Chiropractor = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();
 		});
@@ -937,6 +1300,7 @@ var Massage = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();
 		});
@@ -959,6 +1323,7 @@ var PersonalTraining = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();
 		});
@@ -981,6 +1346,7 @@ var DogWalking = {
 			});
 			
 			Main.loadPeole();
+			Main.loadContacts();
 			Main.loadService();
 			Main.initBookButton();
 		});
@@ -1023,7 +1389,7 @@ var BuildingClean = {
 		$('#page-buildingclean').live('pageshow', function(){
 			Main.currentService = 'buildingclean';
 			Main.serviceDateTime = new Date();
-			$('#selected-date').text(Main.serviceDateTime.toString('dddd, d MMMM yyyy'));
+			$('#selected-date').text(_date(Main.serviceDateTime.toString('dddd , d MMMM yyyy')));
 			Main.loadContacts();
 			Main.initBookButton();
 		});
@@ -1063,7 +1429,7 @@ var ServiceLookup = {
 				dataType: "json",
 				success: function (response) {
 					for(var i = 0; i < response.length; i++){
-						var $li = '<li data-role="list-divider">' + response[i].name + '</li>';
+						var $li = '<li data-role="list-divider">' + _(response[i].name) + '</li>';
 						$('#service-list').append($li);
 			
 						var people = response[i].people;
@@ -1096,16 +1462,147 @@ var ServiceLookup = {
 	}
 }
 
+var AutoHome = {
+	last:0,
+	checking: false,
+	init: function(){
+		$('#page-lighting').live('pageshow', function(){
+			AutoHome.checking = true;
+			AutoHome.initStatus();
+			
+			$('#page-lighting select').change(function(){
+				var name = 'turnOn';
+				if($(this).val() == '0'){
+					name = 'turnOff';
+				}
+				var deviceId = $(this).data('id');
+				$.ajax({
+					type: 'GET',
+					url: Main.autoHomeRoot + 'api/callAction?deviceId=' + deviceId + '&name=' + name,
+					dataType: "json"
+				});
+			});
+		});
+		
+		$('#page-lighting').live('pagehide', function(){
+			AutoHome.checking = false;
+		});
+		
+		$('#page-scenes').live('pageshow', function(){
+			$('#page-scenes a.scene').click(function(){			
+				var id = $(this).data('scene');
+				console.log(id);
+				Main.callSceneControl(id);
+			});
+		});
+	},
+	initStatus: function(){
+		Main.loading = true;
+		$.mobile.loading('show');
+		$.ajax({
+			type: 'GET',
+			url: Main.autoHomeRoot + 'api/interface/data',
+			dataType: "json",
+			success: function(data){
+				var devices = data.devices;
+				for(var i = 0; i < devices.length; i++){
+					var id = devices[i].id;
+					var val = devices[i].properties.value;
+					
+					$('#page-lighting select[data-id="' + id + '"]').val(val).slider('refresh');
+				}
+				
+				AutoHome.checkStatus();
+			},
+			error: function (request, status, error) {
+				console.log(request.responseText);
+			},
+			complete:function(){
+				Main.loading = false;
+				$.mobile.loading('hide');
+			}
+		});
+	},
+	checkStatus: function(){
+		$.ajax({
+			type: 'GET',
+			url: Main.autoHomeRoot + 'api/refreshStates?last=' + AutoHome.last + '&lang=en',
+			dataType: "json",
+			success: function(data){
+				AutoHome.last = data.last;
+				if(data.changes != undefined){
+					var changes = data.changes;
+					for(var i = 0; i < changes.length; i++){
+						var id = changes[i].id;
+						var val = changes[i].value;
+						if(val != undefined){
+							$('#page-lighting select[data-id="' + id + '"]').val(val).slider('refresh');
+						}
+					}
+				}
+				if(AutoHome.checking){
+					AutoHome.checkStatus();
+				}
+			}
+		});
+	}
+}
+
+var Help = {
+	page: null,
+	init: function(){
+		$('a[data-help]').live('click', function(){
+			Help.page = $(this).data('help');
+		});
+		
+		$('#page-help').live('pageshow', function(){
+			if(Help.page == null){
+				$('#page-help .content').html("Can't find help for this page.");
+				return;
+			}
+			
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'GET',
+				url: Main.apiRoot + 'help/?page=' + Help.page,
+				dataType: "json",
+				success: function (response) {
+					$('#page-help .content').html(response.content);
+				},
+				error: function (request, status, error) {
+					Help.page = null;
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});
+		});
+	}
+}
+
 var Tools = {
 	events:null,
-	initHomeCalendar:function(){			
-		$('#calendar').fullCalendar({
+	initHomeCalendar:function(){	
+		var options = {
 			minTime: 7,
 			maxTime: 19,
+			height:720,
 			header: {
 				left: 'prev,next',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
+			},
+			monthNames: [_('January'),_('February'),_('March'),_('April'),_('May'),_('June'), _('July'),_('August'),_('September'),_('October'),_('November'),_('December')],
+			monthNamesShort: [_('Jan'),_('Feb'),_('Mar'),_('Apr'),_('May'),_('Jun'),_('Jul'),_('Aug'),_('Sep'),_('Oct'),_('Nov'),_('Dec')],
+			dayNames: [_('Sunday'),_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday')],
+			dayNamesShort: [_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat')],
+			buttonText: {
+				month: _('month'),
+				week: _('week'),
+				day: _('day')
 			},
 			dayClick:function(date, allDay, jsEvent, view){				
 				if(!$(this).hasClass('disabled')){
@@ -1160,6 +1657,8 @@ var Tools = {
 						url = 'personal_training_booking.html';
 					}else if($.inArray('fc-chiropractor', e.className) == 0){
 						url = 'chiropractor_booking.html';
+					}else if($.inArray('fc-takeaway', e.className) == 0){
+						url = 'takeaway_booking.html';
 					}
 					
 					$li = $('<li><a href="' + url + '" data-id=' + e.id + '>' + timeStr + ' - ' + service+ '</a></li>');
@@ -1196,13 +1695,15 @@ var Tools = {
 					});
 				}
 			}
-		});
+		};
+		
+		$('#calendar').fullCalendar(options);
 
 		$('#calendar').fullCalendar( 'addEventSource', function(start, end, callback){
 			var startStr = start.toString('yyyy-MM-dd');
 			var endStr = end.toString('yyyy-MM-dd');
 			if(Main.test){
-				var data = [{"id":1,"start":"2013-03-08T11:00:00","end":"2013-03-08T15:00:00","type":4},{"id":2,"start":"2013-03-08T13:00:00", "end":"", "type":3}];
+				var data = [{"id":1,"start":"2013-04-08T11:00:00","end":"2013-04-08T15:00:00","type":4},{"id":2,"start":"2013-04-08T13:00:00", "end":"2013-04-08T16:00:00", "type":3}];
 				Tools.generateEvents(data);	
 				callback(Tools.events);				
 			}else{
@@ -1249,55 +1750,55 @@ var Tools = {
 			var className = '';
 			switch(bookingType){
 				case 0:
-					title = 'Dry Clean';
+					title = _('Dry Clean');
 					className = 'fc-dryclean';
 					break;
 				case 1:
-					title = 'Car Wash';
+					title = _('Car Wash');
 					className = 'fc-carwash';
 					break;
 				case 2:
-					title = 'Home Clean';
+					title = _('Home Clean');
 					className = 'fc-homeclean';
 					break;
 				case 3:
-					title = 'Baby Sitting';
+					title = _('Baby Sitting');
 					className = 'fc-babysitting';
 					break;
 				case 4:
-					title = 'Massage';
+					title = _('Massage');
 					className = 'fc-massage';
 					break;
 				case 5:
-					title = 'Car Service';
+					title = _('Car Service');
 					className = 'fc-carservice';
 					break;
 				case 6:
-					title = 'House Removal';
+					title = _('House Removal');
 					className = 'fc-removal';
 					break;
 				case 7:
-					title = 'Building Clean';
+					title = _('Building Clean');
 					className = 'fc-buildingclean';
 					break;
 				case 8:
-					title = 'Building Service';
+					title = _('Building Service');
 					className = 'fc-buildingservice';
 					break;
 				case 9:
-					title = 'Take Away';
+					title = _('Take Away');
 					className = 'fc-takeaway';
 					break;
 				case 10:
-					title = 'Dog Walking';
+					title = _('Dog Walking');
 					className = 'fc-dogwalking';
 					break;
 				case 11:
-					title = 'Personal Training';
+					title = _('Personal Training');
 					className = 'fc-personaltraining';
 					break;
 				case 12:
-					title = 'Chiropractor';
+					title = _('Chiropractor');
 					className = 'fc-chiropractor';
 					break;
 			}
@@ -1320,6 +1821,15 @@ var Tools = {
 				left: 'prev,next',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
+			},
+			monthNames: [_('January'),_('February'),_('March'),_('April'),_('May'),_('June'), _('July'),_('August'),_('September'),_('October'),_('November'),_('December')],
+			monthNamesShort: [_('Jan'),_('Feb'),_('Mar'),_('Apr'),_('May'),_('Jun'),_('Jul'),_('Aug'),_('Sep'),_('Oct'),_('Nov'),_('Dec')],
+			dayNames: [_('Sunday'),_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday')],
+			dayNamesShort: [_('Sun'),_('Mon'),_('Tue'),_('Wed'),_('Thu'),_('Fri'),_('Sat')],
+			buttonText: {
+				month: _('month'),
+				week: _('week'),
+				day: _('day')
 			},
 			dayClick:function(date, allDay, jsEvent, view){				
 				$('#schedule-calendar')
@@ -1468,7 +1978,7 @@ var Login = {
 var Settings = {
 	language:'',
 	init:function(){
-		$('#page-settings').live('pagecreate', function(){
+		$('#page-settings').live('pageshow', function(){
 			$('#btn-logout').click(function(){
 				//window.localStorage.clear();
 				window.localStorage.removeItem('unit');
@@ -1477,6 +1987,7 @@ var Settings = {
 				$.mobile.changePage('login.html');
 			});
 		});
+
 		Language.init();
 		Account.init();
 	}
@@ -1487,7 +1998,7 @@ var Account = {
 	init:function(){
 		var html = '<div class="ui-body ui-body-c resident">' +
 						'<div data-role="fieldcontain">' + 
-							'<label for="name-{0}">Name:</label>' +
+							'<label for="name-{0}">' + _('Name') + ':</label>' +
 							'<input type="text" name="name" id="name-{0}" value="{1}" />' +
 						'</div>' + 
 						'<div data-role="fieldcontain">' +
@@ -1495,11 +2006,11 @@ var Account = {
 							'<input type="text" name="email" id="email-{0}" value="{2}"  />' +
 						'</div>' +
 						'<div data-role="fieldcontain">' +
-							'<label for="mobile-{0}">Mobile:</label>' +
+							'<label for="mobile-{0}">' + _('Mobile') + ':</label>' +
 							'<input type="text" name="mobile" id="mobile-{0}" value="{3}"  />' +
 						'</div>' +
 						'<div data-role="fieldcontain">' +
-							'<a href="#" data-role="button" data-icon="minus" data-inline="true" class="btn-remove">Remove</a>' +
+							'<a href="#" data-role="button" data-icon="minus" data-inline="true" class="btn-remove">' + _('Remove') + '</a>' +
 						'</div>' +
 					'</div>';
 		$('#page-account').live('pageshow', function(){
@@ -1637,6 +2148,18 @@ var Language = {
 					window.localStorage['language'] = language;
 					$.mobile.changePage('../settings.html', {reverse: true});
 				});
+			});
+		}
+	},
+	translate:function(){
+		if(language != 'en'){
+			$('[data-translate="true"]').each(function(){
+				$this = $(this);
+				if($this.find('.ui-btn-text').length > 0){
+					$this = $this.find('.ui-btn-text');
+				}
+				var text = $this.text();
+				$this.text(_(text));
 			});
 		}
 	}

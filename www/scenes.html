@@ -12,18 +12,28 @@
         <script type="text/javascript" src="js/main.js"></script>      
     </head>
     <body>
-        <div id="page-settings" data-role="page" data-theme="c">
+        <div id="page-scenes" data-role="page" data-theme="c">
         	<div data-role="header" data-theme="c">
         		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
-        		<h1 data-translate="true">Settings</h1>
+        		<h1 data-translate="true">Scenes</h1>
         	</div>
-        	<div data-role="content"> 
-				<ul data-role="listview" data-inset="true" data-split-icon="gear">
-					<li><a href="settings/account.html" data-translate="true">My Account</a></li>
-					<li><a href="settings/language.html" data-translate="true">Language</a></li>
-				</ul>
-				<a href="#" data-role="button" data-theme="c" id="btn-logout" data-translate="true">Logout</a>
-        	</div><!-- /content -->
+        	<div data-role="content">
+        		<div data-role="fieldcontain"> 
+					<a href="javascript:;" data-role="button" data-theme="a" data-scene="3" class="scene">Good Morning</a>
+				</div>
+				<div data-role="fieldcontain"> 
+					<a href="javascript:;" data-role="button" data-theme="a" data-scene="1" class="scene">Off to Work</a>
+				</div>
+				<div data-role="fieldcontain"> 
+					<a href="javascript:;" data-role="button" data-theme="a" data-scene="5" class="scene">Welcome Home</a>
+				</div>
+				<div data-role="fieldcontain"> 
+					<a href="javascript:;" data-role="button" data-theme="a" data-scene="12" class="scene">Good Night</a>
+				</div>
+				<div data-role="fieldcontain"> 
+					<a href="javascript:;" data-role="button" data-theme="a" data-scene="13" class="scene">Movie Time</a>
+				</div>
+        	</div>
         </div>
     </body>
 </html>

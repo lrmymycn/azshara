@@ -28,6 +28,7 @@
 	<string>cloud</string>
 	<key>ExternalHosts</key>
 	<array>
+		<string>192.168.1.15</string>
 		<string>shop.myer.com.au</string>
 		<string>www.myer.com.au</string>
 		<string>ibutler.webility.com.au</string>

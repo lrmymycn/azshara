@@ -13,20 +13,24 @@
     </head>
     <body>
         <div id="page-dogwalking-booking" data-role="page" data-theme="c">
-        	<div data-role="header" data-theme="b">
-        		<a href="home.html" data-icon="home" data-direction="reverse">Home</a>
-        		<h1>Dog Walking</h1>
+        	<div data-role="header" data-theme="c">
+        		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
+        		<h1 data-translate="true">Dog Walking</h1>
         	</div>
         	<div data-role="content">
         		<form id="form-cleaner" action="" method="post">
-        			<h3>Date and Time</h3>
+        			<h3 data-translate="true">Date and Time</h3>
         			<span id="selected-date"></span>
-					<h3>Services</h3>
+        			<h3 data-translate="true">Contact</h3>
+					<span id="selected-contact">Loading...</span>
+					<h3 data-translate="true">Walker</h3>
+					<span id="selected-person">Loading...</span>
+					<h3 data-translate="true">Services</h3>
 					<span id="selected-service">Loading...</span>
-					<h3>Note</h3>
+					<h3 data-translate="true">Additional Information</h3>
         			<span id="comment">Loading...</span>
-        			<h2>Total: $<span class="total"></span></h2>
-        			<a href="#" data-role="button" data-inline="true" data-theme="b" class="btn-cancel">Cancel Booking</a>
+        			<h2><span data-translate="true">Total</span>: $<span class="total"></span></h2>
+        			<a href="#" data-role="button" data-inline="true" data-theme="c" class="btn-cancel" data-translate="true">Cancel Booking</a>
         		</form>
         	</div><!-- /content -->
         </div>

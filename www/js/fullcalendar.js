@@ -66,8 +66,8 @@ var defaults = {
 	dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
 	dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
 	buttonText: {
-		prev: '&nbsp;&#9668;&nbsp;',
-		next: '&nbsp;&#9658;&nbsp;',
+		prev: 'left',
+		next: 'right',
 		prevYear: '&nbsp;&lt;&lt;&nbsp;',
 		nextYear: '&nbsp;&gt;&gt;&nbsp;',
 		today: 'today',
@@ -716,7 +716,7 @@ function Header(calendar, options) {
 	
 	
 	function renderSection(position) {
-		var e = $("<td class='fc-header-" + position + "'/>");
+		var e = $("<td class='fc-header-" + position + " ui-corner-all ui-controlgroup ui-controlgroup-horizontal'/>");
 		var buttonStr = options.header[position];
 		if (buttonStr) {
 			$.each(buttonStr.split(' '), function(i) {
@@ -745,18 +745,18 @@ function Header(calendar, options) {
 						if (buttonClick) {
 							var icon = options.theme ? smartProperty(options.buttonIcons, buttonName) : null; // why are we using smartProperty here?
 							var text = smartProperty(options.buttonText, buttonName); // why are we using smartProperty here?
+							var notext = '';
+							if(buttonName == 'prev' || buttonName == 'next'){
+								notext = 'ui-btn-icon-notext';
+							}
 							var button = $(
-								"<span class='fc-button fc-button-" + buttonName + " " + tm + "-state-default'>" +
-									"<span class='fc-button-inner'>" +
-										"<span class='fc-button-content'>" +
-											(icon ?
-												"<span class='fc-icon-wrap'>" +
-													"<span class='ui-icon ui-icon-" + icon + "'/>" +
-												"</span>" :
-												text
-												) +
+								"<span class='fc-button fc-button-" + buttonName + " " + tm + "-state-default ui-btn ui-btn-up-c " + notext + "' data-theme='c'>" +
+									"<span class='fc-button-inner ui-btn-inner'>" +
+										"<span class='ui-btn-text' style='line-height:21px;'>" +											
+												text+												
 										"</span>" +
-										"<span class='fc-button-effect'><span></span></span>" +
+										(buttonName == 'prev' ? '<span class="ui-icon ui-icon-arrow-l ui-icon-shadow">&nbsp;</span>' : '') +
+										(buttonName == 'next' ? '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>' : '') +
 									"</span>" +
 								"</span>"
 							);
@@ -767,31 +767,10 @@ function Header(calendar, options) {
 											buttonClick();
 										}
 									})
-									.mousedown(function() {
-										button
-											.not('.' + tm + '-state-active')
-											.not('.' + tm + '-state-disabled')
-											.addClass(tm + '-state-down');
-									})
-									.mouseup(function() {
-										button.removeClass(tm + '-state-down');
-									})
-									.hover(
-										function() {
-											button
-												.not('.' + tm + '-state-active')
-												.not('.' + tm + '-state-disabled')
-												.addClass(tm + '-state-hover');
-										},
-										function() {
-											button
-												.removeClass(tm + '-state-hover')
-												.removeClass(tm + '-state-down');
-										}
-									)
 									.appendTo(e);
 								if (!prevButton) {
 									button.addClass(tm + '-corner-left');
+									button.addClass('ui-corner-left');
 								}
 								prevButton = button;
 							}
@@ -800,6 +779,7 @@ function Header(calendar, options) {
 				});
 				if (prevButton) {
 					prevButton.addClass(tm + '-corner-right');
+					prevButton.addClass('ui-corner-right');
 				}
 			});
 		}
@@ -815,13 +795,15 @@ function Header(calendar, options) {
 	
 	function activateButton(buttonName) {
 		element.find('span.fc-button-' + buttonName)
-			.addClass(tm + '-state-active');
+			.addClass(tm + '-state-active')
+			.addClass('ui-btn-active');
 	}
 	
 	
 	function deactivateButton(buttonName) {
 		element.find('span.fc-button-' + buttonName)
-			.removeClass(tm + '-state-active');
+			.removeClass(tm + '-state-active')
+			.removeClass('ui-btn-active');
 	}
 	
 	
@@ -3798,7 +3780,8 @@ function AgendaEventRenderer() {
 				* dis + (rtl ? availWidth - outerWidth : 0);   // rtl
 			seg.top = top;
 			seg.left = left;
-			seg.outerWidth = outerWidth;
+			//seg.outerWidth = outerWidth;
+			seg.outerWidth = 23;
 			seg.outerHeight = bottom - top;
 			html += slotSegHtml(event, seg);
 		}
@@ -3874,7 +3857,6 @@ function AgendaEventRenderer() {
 	
 	
 	function slotSegHtml(event, seg) {
-		console.log('1');
 		var html = "<";
 		var url = event.url;
 		var skinCss = getSkinCss(event, opt);

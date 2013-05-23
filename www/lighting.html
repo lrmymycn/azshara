@@ -12,18 +12,34 @@
         <script type="text/javascript" src="js/main.js"></script>      
     </head>
     <body>
-        <div id="page-settings" data-role="page" data-theme="c">
+        <div id="page-lighting" data-role="page" data-theme="c">
         	<div data-role="header" data-theme="c">
         		<a href="home.html" data-icon="home" data-direction="reverse" data-translate="true">Home</a>
-        		<h1 data-translate="true">Settings</h1>
+        		<h1 data-translate="true">Lighting</h1>
         	</div>
-        	<div data-role="content"> 
-				<ul data-role="listview" data-inset="true" data-split-icon="gear">
-					<li><a href="settings/account.html" data-translate="true">My Account</a></li>
-					<li><a href="settings/language.html" data-translate="true">Language</a></li>
-				</ul>
-				<a href="#" data-role="button" data-theme="c" id="btn-logout" data-translate="true">Logout</a>
-        	</div><!-- /content -->
+        	<div data-role="content">
+        		<div data-role="fieldcontain"> 
+					<label for="kitchen">Kitchen:</label>
+					<select name="kitchen" id="kitchen" data-role="slider" data-id="22">
+						<option value="0">Off</option>
+						<option value="1">On</option>
+					</select>
+				</div>
+				<div data-role="fieldcontain"> 
+					<label for="bathroom">Bathroom:</label>
+					<select name="bathroom" id="bathroom" data-role="slider" data-id="30">
+						<option value="0">Off</option>
+						<option value="1">On</option>
+					</select>
+				</div>
+				<div data-role="fieldcontain"> 
+					<label for="livingroom">Living Room:</label>
+					<select name="livingroom" id="livingroom" data-role="slider" data-id="25">
+						<option value="0">Off</option>
+						<option value="1">On</option>
+					</select>
+				</div>
+        	</div>
         </div>
     </body>
 </html>
