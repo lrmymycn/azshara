@@ -477,7 +477,7 @@ var Home = {
 			$.mobile.changePage('store/categories.html');
 		});
 	},
-	initAutoHome:function(){	
+	initAutoHome:function(){		
 		$('#autohome a').click(function(){
 			var id = $(this).data('scene');
 			switch(id){
@@ -509,7 +509,7 @@ var Home = {
 
 			Main.callSceneControl(id);
 		});
-		
+		/*
 		$.ajax({
 			type: 'GET',
 			url: Main.autoHomeRoot + '/api/weather',
@@ -524,6 +524,7 @@ var Home = {
 				$('#wind-val').html(wind + 'km/h');
 			}
 		});
+		*/
 	}
 }
 
@@ -1585,7 +1586,14 @@ var Help = {
 
 var Tools = {
 	events:null,
-	initHomeCalendar:function(){	
+	holdX:0,
+	holdY:0,
+	initHomeCalendar:function(){
+		$(document).bind('vmousedown', function(event){
+			Tools.holdX = event.pageX;
+			Tools.holdY = event.pageY;
+		});
+		
 		var options = {
 			minTime: 7,
 			maxTime: 19,
@@ -1615,15 +1623,18 @@ var Tools = {
 					Main.serviceDateTime = date;
 				}
 			},
-			eventClick:function(event, jsEvent, view){
+			dayLongClick:function(date, allDay, jsEvent, view){
 				var offset = $(this).offset();
+				
 				var x = offset.left + ($(this).width() / 2);
-				var y = offset.top + ($(this).height() / 2);	
+				var y = offset.top + ($(this).height() / 2);
+				
 				$('#popupBooking ul').empty();
-				var dateStr = event.start.toString('yyyy-MM-dd');
+				var dateStr = date.toString('yyyy-MM-dd');
 				var $li = $('<li data-role="divider" data-theme="c">' + dateStr + '</li>');
 				$('#popupBooking ul').append($li);
-				var sameDateEvents = Tools.getSameDayEvents(event);
+				var sameDateEvents = Tools.getEventsByDate(date);
+				
 				for(var i = 0; i < sameDateEvents.length; i++){
 					var e = sameDateEvents[i];
 					var service = e.title;
@@ -1676,6 +1687,9 @@ var Tools = {
 				$('#popupBooking ul').listview('refresh');		
 				$('#popupBooking').popup('open', {x:x, y:y});
 			},
+			eventClick:function(event, jsEvent, view){	
+				
+			},
 			viewDisplay:function(view){
 				$('#calendar .fc-content td.disabled').removeClass('disabled');
 				var date = $("#calendar").fullCalendar('getDate');
@@ -1703,7 +1717,7 @@ var Tools = {
 			var startStr = start.toString('yyyy-MM-dd');
 			var endStr = end.toString('yyyy-MM-dd');
 			if(Main.test){
-				var data = [{"id":1,"start":"2013-04-08T11:00:00","end":"2013-04-08T15:00:00","type":4},{"id":2,"start":"2013-04-08T13:00:00", "end":"2013-04-08T16:00:00", "type":3}];
+				var data = [{"id":1,"start":"2013-05-28T11:00:00","end":"2013-05-28T15:00:00","type":4},{"id":2,"start":"2013-05-28T13:00:00", "end":"2013-05-28T16:00:00", "type":3}];
 				Tools.generateEvents(data);	
 				callback(Tools.events);				
 			}else{
@@ -1887,6 +1901,17 @@ var Tools = {
 			}
 		}
 		return sameDateEvents;
+	},
+	getEventsByDate: function(d){
+		var date = d.toString('M/d/yyyy');
+		var events = [];
+		for(var i = 0; i < Tools.events.length; i++){
+			var eventDate = Tools.events[i].start.toString('M/d/yyyy');
+			if(date == eventDate){
+				events.push(Tools.events[i]);
+			}
+		}
+		return events;
 	},
 	removeA: function (arr) {
 		var what, a = arguments, L = a.length, ax;

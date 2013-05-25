@@ -716,11 +716,13 @@ table.fc-border-separate {
 .fc-agenda .ui-resizable-resizing { /* TODO: better selector */
 	_overflow: hidden;
 	}
-	
-	
-
 
 /* main */
+html {
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
 input.error, textarea.error{
 	color:#D8000C;
 	background:#FFBABA;
@@ -789,6 +791,13 @@ input.date-picker{
 	margin-top:10px;
 }
 
-#autohome .ui-field-contain label{
-	padding-left:5px;
+#autohome .controller img{
+	float:left;
+	width:50%;
+	margin-top:10px;
+}
+
+#autohome .controller .buttons{
+	float:right;
+	width:50%;
 }

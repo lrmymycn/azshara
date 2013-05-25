@@ -2348,6 +2348,7 @@ function BasicView(element, calendar, viewName) {
 	
 	function dayBind(days) {
 		days.click(dayClick)
+			.taphold(dayLongClick)
 			.mousedown(daySelectionMousedown);
 	}
 	
@@ -2360,6 +2361,13 @@ function BasicView(element, calendar, viewName) {
 		}
 	}
 	
+	function dayLongClick(ev){
+		if (!opt('selectable')) { // if selectable, SelectionManager will worry about dayClick
+			var index = parseInt(this.className.match(/fc\-day(\d+)/)[1]); // TODO: maybe use .data
+			var date = indexDate(index);
+			trigger('dayLongClick', this, date, true, ev);
+		}
+	}
 	
 	
 	/* Semi-transparent Overlay Helpers
@@ -3202,12 +3210,14 @@ function AgendaView(element, calendar, viewName) {
 
 	function dayBind(cells) {
 		cells.click(slotClick)
+			.taphold(slotLongClick)
 			.mousedown(daySelectionMousedown);
 	}
 
 
 	function slotBind(cells) {
 		cells.click(slotClick)
+			.taphold(slotLongClick)
 			.mousedown(slotSelectionMousedown);
 	}
 	
@@ -3225,6 +3235,23 @@ function AgendaView(element, calendar, viewName) {
 				trigger('dayClick', dayBodyCells[col], date, false, ev);
 			}else{
 				trigger('dayClick', dayBodyCells[col], date, true, ev);
+			}
+		}
+	}
+	
+	function slotLongClick(ev){
+		if (!opt('selectable')) { // if selectable, SelectionManager will worry about dayClick
+			var col = Math.min(colCnt-1, Math.floor((Tools.holdX - dayTable.offset().left - axisWidth) / colWidth));
+			var date = colDate(col);
+			var rowMatch = this.parentNode.className.match(/fc-slot(\d+)/); // TODO: maybe use data
+			if (rowMatch) {
+				var mins = parseInt(rowMatch[1]) * opt('slotMinutes');
+				var hours = Math.floor(mins/60);
+				date.setHours(hours);
+				date.setMinutes(mins%60 + minMinute);
+				trigger('dayLongClick', dayBodyCells[col], date, false, ev);
+			}else{
+				trigger('dayLongClick', dayBodyCells[col], date, true, ev);
 			}
 		}
 	}
