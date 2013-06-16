@@ -548,9 +548,9 @@ table.fc-border-separate {
 	}
 	
 .fc-grid .fc-day-number {
-	float: right;
-	padding: 0 2px;
-	}
+	text-align:right;
+	padding: 3px 2px;
+}
 	
 .fc-grid .fc-other-month .fc-day-number {
 	opacity: 0.3;
@@ -723,6 +723,34 @@ html {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+div.ui-header .left-buttons{
+	position:absolute;
+	margin:0px;
+	top:1px;
+	left:5px;
+}
+
+div.ui-header .right-buttons{
+	position:absolute;
+	margin:0px;
+	right:5px;
+	top:5px;
+}
+
+div.ui-header .left-buttons a .ui-btn-inner{
+	height:24px;
+	width:24px;
+	position:relative;
+}
+
+div.ui-header .left-buttons a img{
+	position:absolute;
+	width:24px;
+	height:24px;
+	left:0;
+	top:0;
+}
+
 input.error, textarea.error{
 	color:#D8000C;
 	background:#FFBABA;
@@ -751,13 +779,17 @@ input.date-picker{
 #calendar{
 	width:738px;
 	margin:0 auto;
-	min-height:720px;
+	min-height:690px;
 }
 #calendar td.disabled{
 	background:#EEEEEE;
 }
 #resident-list .ui-body{
 	margin-bottom:5px;
+}
+
+#page-home .ui-content{
+	padding-bottom:0px;
 }
 
 /* dock */
@@ -782,6 +814,16 @@ input.date-picker{
 	border-radius:2em;
 }
 
+.dock .scenes{
+	float:right;
+	margin-right:20px;
+}
+
+.dock .scenes .ui-btn{
+	display:inline-block;
+	margin:0;
+}
+
 .weather label{
 	color:#BC8139;
 	padding-right:5px;
@@ -789,15 +831,95 @@ input.date-picker{
 
 #autohome {
 	margin-top:10px;
+	width:100%;
+	overflow:hidden;
 }
 
-#autohome .controller img{
+#autohome .controller{
+	width:105px;
 	float:left;
-	width:50%;
-	margin-top:10px;
+	text-align:center;
+	padding:0 30px;
 }
 
-#autohome .controller .buttons{
-	float:right;
-	width:50%;
+#autohome .controller .ui-controlgroup{
+	margin-top:0;
+}
+#autohome .controller .ui-controlgroup-horizontal a{
+	width:50px;
+}
+
+#autohome .controller .icon img{
+	height:75px;
+}
+
+#autohome .airconditions{
+	float:left;
+	padding-left:30px;
+}
+
+#autohome .airconditions .temp{
+	width:100%;
+	overflow:hidden;
+}
+
+#autohome .airconditions .temp .left{
+	float:left;
+}
+
+#autohome .airconditions .temp img{
+	height:75px;
+}
+
+#autohome .airconditions .temp span.deg{
+	font-size:40px;
+	vertical-align:top;
+	padding:20px 10px 0;
+	display:inline-block;
+}
+
+#autohome .airconditions .tempbutton{
+	float:left;
+}
+
+#autohome .airconditions .tempbutton .ui-controlgroup a{
+	width:52px;
+}
+
+#autohome .airconditions .tempbutton .ui-controlgroup .ui-btn-icon-notext .ui-btn-inner {
+	height: 33px;
+	padding: .6em 20px;
+}
+
+#autohome .airconditions .ui-controlgroup{
+	margin-top:0;
+}
+
+#autohome .airconditions .left .ui-controlgroup a{
+	width:50px;
+	height:29px;
+}
+
+#autohome .airconditions .button .ui-controlgroup .ui-radio{
+	width:52px;
+	height:30px;
+}
+
+#autohome .airconditions .button .ui-controlgroup .ui-btn-inner{
+	height:14px;
+}
+
+#autohome .airconditions .ui-controlgroup .ui-btn-text{
+	position:relative;
+}
+
+#autohome .airconditions .ui-controlgroup img{
+	height:18px;
+	position:absolute;
+	top:-2px;
+	left:5px;
+}
+
+#autohome .airconditions .button-low .ui-corner-all{
+	display:inline-block;
 }

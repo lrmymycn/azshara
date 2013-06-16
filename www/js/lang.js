@@ -37,6 +37,7 @@ var zh = {
 	'Add Clothes':'添加物件',
 	'Add Contact':'添加联系人',
 	'Add Meal':'添加外卖',
+	'Add New Booking':'添加预约',
 	'Additional Information':'补充说明',
 	'Back':'返回',
 	'Baby Sitter':'保姆',

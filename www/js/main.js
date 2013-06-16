@@ -45,6 +45,7 @@ var Main = {
 			BuildingService.init();
 			ServiceLookup.init();
 			TakeAway.init();
+			Payment.init();
 			Help.init();
 		});
 	},
@@ -452,6 +453,7 @@ var Main = {
 }
 
 var Home = {
+	degree: 25,
 	init:function(){
 		$('#page-home').live('pageshow', function(){
 			Main.currentService = 'Home';
@@ -482,33 +484,47 @@ var Home = {
 			var id = $(this).data('scene');
 			switch(id){
 				case 6:
-					$('#autohome a[data-scene="6"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
-					$('#autohome a[data-scene="7"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
-					break;
-				case 7:
 					$('#autohome a[data-scene="6"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
 					$('#autohome a[data-scene="7"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
 					break;
-				case 8:
-					$('#autohome a[data-scene="8"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
-					$('#autohome a[data-scene="9"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+				case 7:
+					$('#autohome a[data-scene="6"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="7"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
 					break;
-				case 9:
+				case 8:
 					$('#autohome a[data-scene="8"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
 					$('#autohome a[data-scene="9"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
 					break;
-				case 10:
-					$('#autohome a[data-scene="10"]').attr('data-theme', 'c').removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
-					$('#autohome a[data-scene="11"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
+				case 9:
+					$('#autohome a[data-scene="8"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="9"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
 					break;
-				case 11:
+				case 10:
 					$('#autohome a[data-scene="10"]').attr('data-theme', 'a').removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
 					$('#autohome a[data-scene="11"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					break;
+				case 11:
+					$('#autohome a[data-scene="10"]').attr('data-theme', 'c').removeClass('ui-btn-up-e').addClass('ui-btn-up-c');
+					$('#autohome a[data-scene="11"]').attr('data-theme', 'e').removeClass('ui-btn-up-c').addClass('ui-btn-up-e');
 					break;
 			}
 
 			Main.callSceneControl(id);
 		});
+		
+		$('a.scene').click(function(){			
+			var id = $(this).data('scene');
+			console.log(id);
+			Main.callSceneControl(id);
+		});
+		
+		$('.tempbutton a').click(function(){
+			var temp = $(this).data('temp');
+			Home.degree = Home.degree + parseInt(temp);
+			
+			$('.deg').html(Home.degree + '&deg;C');
+		});
+		
 		/*
 		$.ajax({
 			type: 'GET',
@@ -1463,15 +1479,69 @@ var ServiceLookup = {
 	}
 }
 
+var Payment = {
+	init: function(){
+		var date = new Date();
+		var startStr = new Date(date.getFullYear(), date.getMonth(), 1).toString('yyyy-MM-dd');
+		var endStr = new Date(date.getFullYear(), date.getMonth() + 1, 0).toString('yyyy-MM-dd');
+		
+		$('#page-payment').live('pageshow', function(){
+			Main.loading = true;
+			$.mobile.loading('show');
+			$.ajax({
+				type: 'POST',
+				contentType: 'application/json',
+				url: Main.apiRoot + 'payment/',
+				dataType: "json",
+				data: '{"start":"' + startStr + '", "end":"' + endStr + '"}',
+				beforeSend: function (request) {
+					request.setRequestHeader("Authorization", "Basic " + Tools.encodeBase64(Main.unit + ':' + Main.password));
+				},
+				success: function (response) {
+					var date = '';
+					for(var i = 0; i < response.length; i++){
+						if(date != response[i].start){
+							date = response[i].start;
+							var dateStr = Date.parse(date).toString('dddd, MMMM dd, yyyy');
+							var $li = '<li data-role="list-divider">' + dateStr + '</li>';
+							$('#payment-list').append($li);
+						}
+						$li = $('<li><a href="' + Tools.bookingTypeToUrl(response[i].type) + '" data-id="' + response[i].id + '">' + Tools.bookingTypeToName(response[i].type) + '</a><span class="ui-li-count"> $' + response[i].price.toFixed(2) + '</span></li>');
+						$li.find('a').click(function(){
+							var id = $(this).data('id');
+							var eventArr = $.grep(Tools.events, function(e){ return e.id == id; });
+							if(eventArr.length == 0){
+								return false;
+							}else{
+								Main.currentEvent = eventArr[0];
+							}
+						});
+						$('#payment-list').append($li);
+					}			
+					$('#payment-list').listview('refresh');
+				},
+				error: function (request, status, error) {
+					console.log(request.responseText);
+				},
+				complete:function(){
+					Main.loading = false;
+					$.mobile.loading('hide');
+				}
+			});
+		});
+	}	
+}
+
 var AutoHome = {
 	last:0,
 	checking: false,
 	init: function(){
-		$('#page-lighting').live('pageshow', function(){
+		$('#page-homeautomation').live('pageshow', function(){
+			console.log('auto');
 			AutoHome.checking = true;
 			AutoHome.initStatus();
 			
-			$('#page-lighting select').change(function(){
+			$('#page-homeautomation select').change(function(){
 				var name = 'turnOn';
 				if($(this).val() == '0'){
 					name = 'turnOff';
@@ -1479,23 +1549,37 @@ var AutoHome = {
 				var deviceId = $(this).data('id');
 				$.ajax({
 					type: 'GET',
-					url: Main.autoHomeRoot + 'api/callAction?deviceId=' + deviceId + '&name=' + name,
-					dataType: "json"
+					url: Main.autoHomeRoot + 'api/callAction?deviceId=' + deviceId + '&name=' + name
 				});
+			});
+			
+			$('#page-homeautomation .slider .ui-slider').bind('vmouseup', function(){
+				var $input = $(this).prev('input');
+				var val = $input.val();
+				console.log(val);
+
+				var deviceId = $input.data('id');
+				$.ajax({
+					type: 'GET',
+					url: Main.autoHomeRoot + 'api/callAction?deviceId=' + deviceId + '&name=setValue&arg1=' + val
+				});
+
 			});
 		});
 		
-		$('#page-lighting').live('pagehide', function(){
+		$('#page-homeautomation').live('pagehide', function(){
 			AutoHome.checking = false;
 		});
 		
-		$('#page-scenes').live('pageshow', function(){
+		/*
+		$('#page-homeautomation').live('pageshow', function(){
 			$('#page-scenes a.scene').click(function(){			
 				var id = $(this).data('scene');
 				console.log(id);
 				Main.callSceneControl(id);
 			});
 		});
+		*/
 	},
 	initStatus: function(){
 		Main.loading = true;
@@ -1510,7 +1594,7 @@ var AutoHome = {
 					var id = devices[i].id;
 					var val = devices[i].properties.value;
 					
-					$('#page-lighting select[data-id="' + id + '"]').val(val).slider('refresh');
+					$('#page-homeautomation *[data-id="' + id + '"]').val(val).slider('refresh');
 				}
 				
 				AutoHome.checkStatus();
@@ -1537,7 +1621,7 @@ var AutoHome = {
 						var id = changes[i].id;
 						var val = changes[i].value;
 						if(val != undefined){
-							$('#page-lighting select[data-id="' + id + '"]').val(val).slider('refresh');
+							$('#page-homeautomation *[data-id="' + id + '"]').val(val).slider('refresh');
 						}
 					}
 				}
@@ -1597,11 +1681,11 @@ var Tools = {
 		var options = {
 			minTime: 7,
 			maxTime: 19,
-			height:720,
+			height:690,
 			header: {
 				left: 'prev,next',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'agendaDay,agendaWeek,month'
 			},
 			monthNames: [_('January'),_('February'),_('March'),_('April'),_('May'),_('June'), _('July'),_('August'),_('September'),_('October'),_('November'),_('December')],
 			monthNamesShort: [_('Jan'),_('Feb'),_('Mar'),_('Apr'),_('May'),_('Jun'),_('Jul'),_('Aug'),_('Sep'),_('Oct'),_('Nov'),_('Dec')],
@@ -1612,83 +1696,26 @@ var Tools = {
 				week: _('week'),
 				day: _('day')
 			},
-			dayClick:function(date, allDay, jsEvent, view){				
-				if(!$(this).hasClass('disabled')){
-					var offset = $(this).offset();
+			dayClick:function(date, allDay, jsEvent, view){
+				var offset = $(this).offset();
+				var x = offset.left + ($(this).width() / 2);
+				var y = offset.top + ($(this).height() / 2);
+		
+				var sameDateEvents = Tools.getEventsByDate(date);
 
-					var x = offset.left + ($(this).width() / 2);
-					var y = offset.top + ($(this).height() / 2);
-					
-					$('#popupMenu').popup('open', {x:x, y:y});
-					Main.serviceDateTime = date;
-				}
+				Tools.showBookingPopup(date, sameDateEvents, x, y);
 			},
 			dayLongClick:function(date, allDay, jsEvent, view){
-				var offset = $(this).offset();
 				
+			},
+			eventClick:function(event, jsEvent, view){	
+				var offset = $(this).offset();
 				var x = offset.left + ($(this).width() / 2);
 				var y = offset.top + ($(this).height() / 2);
 				
-				$('#popupBooking ul').empty();
-				var dateStr = date.toString('yyyy-MM-dd');
-				var $li = $('<li data-role="divider" data-theme="c">' + dateStr + '</li>');
-				$('#popupBooking ul').append($li);
-				var sameDateEvents = Tools.getEventsByDate(date);
+				var sameDateEvents = Tools.getSameDayEvents(event);
 				
-				for(var i = 0; i < sameDateEvents.length; i++){
-					var e = sameDateEvents[i];
-					var service = e.title;
-					var timeStr = e.start.toString('hh:mm tt');
-					if(timeStr == '00:00 AM'){
-						timeStr = 'All day';
-					}
-					var url = '#';
-
-					if($.inArray('fc-massage', e.className) == 0){
-						url = 'massage_booking.html';
-					}else if($.inArray('fc-homeclean', e.className) == 0){
-						url = 'cleaner_booking.html';
-					}else if($.inArray('fc-carwash', e.className) == 0){
-						url = 'carwash_booking.html';
-					}else if($.inArray('fc-babysitting', e.className) == 0){
-						url = 'baby_sitting_booking.html';
-					}else if($.inArray('fc-carservice', e.className) == 0){
-						url = 'carservice_booking.html';
-					}else if($.inArray('fc-dryclean', e.className) == 0){
-						url = 'dryclean_booking.html';
-					}else if($.inArray('fc-removal', e.className) == 0){
-						url = 'removal_booking.html';
-					}else if($.inArray('fc-buildingclean', e.className) == 0){
-						url = 'building_clean_booking.html';
-					}else if($.inArray('fc-buildingservice', e.className) == 0){
-						url = 'building_service_booking.html';
-					}else if($.inArray('fc-dogwalking', e.className) == 0){
-						url = 'dogwalking_booking.html';
-					}else if($.inArray('fc-personaltraining', e.className) == 0){
-						url = 'personal_training_booking.html';
-					}else if($.inArray('fc-chiropractor', e.className) == 0){
-						url = 'chiropractor_booking.html';
-					}else if($.inArray('fc-takeaway', e.className) == 0){
-						url = 'takeaway_booking.html';
-					}
-					
-					$li = $('<li><a href="' + url + '" data-id=' + e.id + '>' + timeStr + ' - ' + service+ '</a></li>');
-					$li.find('a').click(function(){
-						var id = $(this).data('id');
-						var eventArr = $.grep(Tools.events, function(e){ return e.id == id; });
-						if(eventArr.length == 0){
-							return false;
-						}else{
-							Main.currentEvent = eventArr[0];
-						}
-					});
-					$('#popupBooking ul').append($li);
-				}
-				$('#popupBooking ul').listview('refresh');		
-				$('#popupBooking').popup('open', {x:x, y:y});
-			},
-			eventClick:function(event, jsEvent, view){	
-				
+				Tools.showBookingPopup(event.start, sameDateEvents, x, y);
 			},
 			viewDisplay:function(view){
 				$('#calendar .fc-content td.disabled').removeClass('disabled');
@@ -1747,6 +1774,94 @@ var Tools = {
 			}
 		});
 	},
+	showBookingPopup:function(date, sameDateEvents, x, y){
+		var dateStr = date.toString('yyyy-MM-dd');
+				
+		if(sameDateEvents.length > 0){
+			$('#popupBooking ul').empty();
+			var $li = $('<li data-role="divider" data-theme="c">' + dateStr + '</li>');
+			$('#popupBooking ul').append($li);
+	
+			for(var i = 0; i < sameDateEvents.length; i++){
+				var e = sameDateEvents[i];
+				var service = e.title;
+				var timeStr = e.start.toString('hh:mm tt');
+				if(timeStr == '00:00 AM'){
+					timeStr = 'All day';
+				}
+				var url = '#';
+
+				if($.inArray('fc-massage', e.className) == 0){
+					url = 'massage_booking.html';
+				}else if($.inArray('fc-homeclean', e.className) == 0){
+					url = 'cleaner_booking.html';
+				}else if($.inArray('fc-carwash', e.className) == 0){
+					url = 'carwash_booking.html';
+				}else if($.inArray('fc-babysitting', e.className) == 0){
+					url = 'baby_sitting_booking.html';
+				}else if($.inArray('fc-carservice', e.className) == 0){
+					url = 'carservice_booking.html';
+				}else if($.inArray('fc-dryclean', e.className) == 0){
+					url = 'dryclean_booking.html';
+				}else if($.inArray('fc-removal', e.className) == 0){
+					url = 'removal_booking.html';
+				}else if($.inArray('fc-buildingclean', e.className) == 0){
+					url = 'building_clean_booking.html';
+				}else if($.inArray('fc-buildingservice', e.className) == 0){
+					url = 'building_service_booking.html';
+				}else if($.inArray('fc-dogwalking', e.className) == 0){
+					url = 'dogwalking_booking.html';
+				}else if($.inArray('fc-personaltraining', e.className) == 0){
+					url = 'personal_training_booking.html';
+				}else if($.inArray('fc-chiropractor', e.className) == 0){
+					url = 'chiropractor_booking.html';
+				}else if($.inArray('fc-takeaway', e.className) == 0){
+					url = 'takeaway_booking.html';
+				}
+		
+				$li = $('<li><a href="' + url + '" data-id=' + e.id + '>' + timeStr + ' - ' + service+ '</a></li>');
+				$li.find('a').click(function(){
+					var id = $(this).data('id');
+					var eventArr = $.grep(Tools.events, function(e){ return e.id == id; });
+					if(eventArr.length == 0){
+						return false;
+					}else{
+						Main.currentEvent = eventArr[0];
+					}
+				});
+				$('#popupBooking ul').append($li);
+			}
+		
+			if(!$(this).hasClass('disabled')){
+		
+			var $add = $('<li data-icon="plus"><a href="javascript:;">' + _('Add New Booking') + '</a></li>');
+				$('#popupBooking ul').append($add);
+		
+				$add.click(function(){
+					$('#popupBooking').bind({
+						popupafterclose: function(){
+							setTimeout( function(){
+								$('#popupMenu').popup('open', {x:x, y:y});
+								Main.serviceDateTime = date;
+								$('#popupBooking').unbind('popupafterclose');
+							}, 100 );
+						}
+					});
+			
+					$('#popupBooking').popup('close');
+				});
+			}
+			$('#popupBooking ul').listview('refresh');		
+			$('#popupBooking').popup('open', {x:x, y:y});
+		}
+		else
+		{
+			if(!$(this).hasClass('disabled')){
+				$('#popupMenu').popup('open', {x:x, y:y});
+				Main.serviceDateTime = date;
+			}
+		}
+	},
 	generateEvents: function(response){
 		Tools.events = new Array();
 		for(var i = 0; i < response.length; i++){
@@ -1760,62 +1875,9 @@ var Tools = {
 				bookingEnd = Date.parse(booking.end);
 			}
 			var bookingType = booking.type;
-			var title = '';
-			var className = '';
-			switch(bookingType){
-				case 0:
-					title = _('Dry Clean');
-					className = 'fc-dryclean';
-					break;
-				case 1:
-					title = _('Car Wash');
-					className = 'fc-carwash';
-					break;
-				case 2:
-					title = _('Home Clean');
-					className = 'fc-homeclean';
-					break;
-				case 3:
-					title = _('Baby Sitting');
-					className = 'fc-babysitting';
-					break;
-				case 4:
-					title = _('Massage');
-					className = 'fc-massage';
-					break;
-				case 5:
-					title = _('Car Service');
-					className = 'fc-carservice';
-					break;
-				case 6:
-					title = _('House Removal');
-					className = 'fc-removal';
-					break;
-				case 7:
-					title = _('Building Clean');
-					className = 'fc-buildingclean';
-					break;
-				case 8:
-					title = _('Building Service');
-					className = 'fc-buildingservice';
-					break;
-				case 9:
-					title = _('Take Away');
-					className = 'fc-takeaway';
-					break;
-				case 10:
-					title = _('Dog Walking');
-					className = 'fc-dogwalking';
-					break;
-				case 11:
-					title = _('Personal Training');
-					className = 'fc-personaltraining';
-					break;
-				case 12:
-					title = _('Chiropractor');
-					className = 'fc-chiropractor';
-					break;
-			}
+			var title = Tools.bookingTypeToName(bookingType);
+			var className = Tools.bookingTypeToClass(bookingType);
+			
 			var event = {
 				id: booking.id,
 				title: title,
@@ -1826,6 +1888,142 @@ var Tools = {
 			}
 			Tools.events.push(event);
 		}
+	},
+	bookingTypeToName: function(bookingType){
+		var title = '';
+		switch(bookingType){
+			case 0:
+				title = _('Dry Clean');
+				break;
+			case 1:
+				title = _('Car Wash');
+				break;
+			case 2:
+				title = _('Home Clean');
+				break;
+			case 3:
+				title = _('Baby Sitting');
+				break;
+			case 4:
+				title = _('Massage');
+				break;
+			case 5:
+				title = _('Car Service');
+				break;
+			case 6:
+				title = _('House Removal');
+				break;
+			case 7:
+				title = _('Building Clean');
+				break;
+			case 8:
+				title = _('Building Service');
+				break;
+			case 9:
+				title = _('Take Away');
+				break;
+			case 10:
+				title = _('Dog Walking');
+				break;
+			case 11:
+				title = _('Personal Training');
+				break;
+			case 12:
+				title = _('Chiropractor');
+				break;
+		}
+		
+		return title;
+	},
+	bookingTypeToClass: function(bookingType){
+		var className = '';
+		switch(bookingType){
+			case 0:
+				className = 'fc-dryclean';
+				break;
+			case 1:
+				className = 'fc-carwash';
+				break;
+			case 2:
+				className = 'fc-homeclean';
+				break;
+			case 3:
+				className = 'fc-babysitting';
+				break;
+			case 4:
+				className = 'fc-massage';
+				break;
+			case 5:
+				className = 'fc-carservice';
+				break;
+			case 6:
+				className = 'fc-removal';
+				break;
+			case 7:
+				className = 'fc-buildingclean';
+				break;
+			case 8:
+				className = 'fc-buildingservice';
+				break;
+			case 9:
+				className = 'fc-takeaway';
+				break;
+			case 10:
+				className = 'fc-dogwalking';
+				break;
+			case 11:
+				className = 'fc-personaltraining';
+				break;
+			case 12:
+				className = 'fc-chiropractor';
+				break;
+		}
+		return className;
+	},
+	bookingTypeToUrl: function(bookingType){
+		var url = '';
+		switch(bookingType){
+			case 0:
+				url = 'dryclean_booking.html';
+				break;
+			case 1:
+				url = 'carwash_booking.html';
+				break;
+			case 2:
+				url = 'cleaner_booking.html';
+				break;
+			case 3:
+				url = 'baby_sitting_booking.html';
+				break;
+			case 4:
+				url = 'massage_booking.html';
+				break;
+			case 5:
+				url = 'carservice_booking.html';
+				break;
+			case 6:
+				url = 'removal_booking.html';
+				break;
+			case 7:
+				url = 'building_clean_booking.html';
+				break;
+			case 8:
+				url = 'building_service_booking.html';
+				break;
+			case 9:
+				url = 'takeaway_booking.html';
+				break;
+			case 10:
+				url = 'dogwalking_booking.html';
+				break;
+			case 11:
+				url = 'personal_training_booking.html';
+				break;
+			case 12:
+				url = 'chiropractor_booking.html';
+				break;
+		}
+		return url;
 	},
 	initScheduleCalendar:function(){
 		$('#schedule-calendar').fullCalendar({
