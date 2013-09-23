@@ -24,95 +24,19 @@
         		<div data-role="controlgroup" data-type="horizontal" class="right-buttons" data-mini="true">
         			<a href="settings.html" data-icon="gear" data-theme="c" data-translate="true" data-role="button">Settings</a>
         			<a href="help.html" data-help="home" data-icon="info" data-theme="c" data-translate="true" data-role="button">Help</a>
+        			<a href="#" id="home-logout" data-icon="back" data-role="button" data-theme="e">Logout</a>
         		</div>
         	</div>
         	<div data-role="content">
         		<div id="calendar"></div>
-        		<!--
         		<div id="ads">      		
         		</div>
-        		-->
-        		<div id="autohome">
-					<div class="controller">
-						<div class="icon">
-							<img src="img/homeautomation/lighting.png" alt="lighting"/>
-						</div>
-						<div class="buttons">
-							<div data-role="controlgroup" data-type="horizontal">
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="6">On</a>
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="7">Off</a>
-							</div>
-							<a href="lighting.html" data-role="button" data-mini="true">Rooms</a>
-						</div>
-					</div>
-					<div class="controller">
-						<div class="icon">
-							<img src="img/homeautomation/curtain.png" alt="curtain"/>
-						</div>
-						<div class="buttons">
-							<div data-role="controlgroup" data-type="horizontal">
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="8">On</a>
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="9">Off</a>
-							</div>
-							<a href="curtain.html" data-role="button" data-mini="true">Rooms</a>
-						</div>
-					</div>
-					<div class="controller">
-						<div class="icon">
-							<img src="img/homeautomation/powerplug.png" alt="powerplug"/>
-						</div>
-						<div class="buttons">
-							<div data-role="controlgroup" data-type="horizontal">
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="10">On</a>
-								<a href="javascript:;" data-role="button" data-mini="true" data-scene="11">Off</a>
-							</div>
-							<a href="plug.html" data-role="button" data-mini="true">Rooms</a>
-						</div>
-					</div>
-					<div class="airconditions">
-						<div class="temp">
-							<div class="left">
-								<img src="img/homeautomation/temp.png" alt="temp"/>
-								<span class="deg">25&deg;C</span>
-								<div data-role="controlgroup" data-type="horizontal">
-									<a href="javascript:;" data-role="button" data-mini="true">On</a>
-									<a href="javascript:;" data-role="button" data-mini="true">Off</a>
-								</div>
-							</div>
-							<div class="tempbutton">
-								<div data-role="controlgroup">
-									<a href="#" data-temp="1" data-role="button" data-iconpos="notext" data-icon="arrow-u">Up</a>
-									<a href="#" data-temp="-1" data-role="button" data-iconpos="notext" data-icon="arrow-d">Down</a>
-								</div>
-							</div>							
-						</div>
-						<div class="button">
-							<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-								<input name="mode" id="mode-hot" value="hot" type="radio">
-								<label for="mode-hot"><img src="img/homeautomation/hot.png" alt="hot"/></label>
-								<input name="mode" id="mode-cold" value="cold" type="radio" checked="checked">
-								<label for="mode-cold"><img src="img/homeautomation/cold.png" alt="cold"/></label>
-								<input name="mode" id="mode-fan" value="fan" type="radio">
-								<label for="mode-fan"><img src="img/homeautomation/fan.png" alt="fan"/></label>
-								<input name="mode" id="mode-humid" value="humid" type="radio">
-								<label for="mode-humid"><img src="img/homeautomation/humid.png" alt="fan"/></label>
-							</fieldset>
-						</div>
-					</div>
-				</div>
         	</div><!-- /content -->
         	<div data-role="footer" class="dock" data-theme="c" data-position="fixed">
 				<a href="javascript:;" class="btn-store grocery" data-role="button" data-iconpos="notext"><img src="img/icons/icon_grocery_big.png" alt="" width="60" height="60"/></a>
 				<!--<a href="javascript:;" class="btn-store myer" data-role="button" data-icon="star"><span id="menu-myer">Myer</span></a>-->
 				<!--<a href="takeaway.html" data-role="button" data-icon="star" data-iconpos="notext"></a>-->
 				<a href="mtaxi://mtaxi.com.au/start.do" target="_blank" data-role="button" data-iconpos="notext"><img src="img/icons/icon_taxi_big.png" alt="" width="60" height="60"/></a>
-				<div class="scenes">
-					<a href="javascript:;" data-role="button" data-iconpos="notext" data-scene="3" class="scene"><img src="img/homeautomation/morning.png" alt="" width="60" height="60"/></a>
-					<a href="javascript:;" data-role="button" data-iconpos="notext" data-scene="1" class="scene"><img src="img/homeautomation/off-to-work.png" alt="" width="60" height="60"/></a>
-					<a href="javascript:;" data-role="button" data-iconpos="notext" data-scene="5" class="scene"><img src="img/homeautomation/welcome-home.png" alt="" width="60" height="60"/></a>
-					<a href="javascript:;" data-role="button" data-iconpos="notext" data-scene="12" class="scene"><img src="img/homeautomation/night.png" alt="" width="60" height="60"/></a>
-					<a href="javascript:;" data-role="button" data-iconpos="notext" data-scene="13" class="scene"><img src="img/homeautomation/movie.png" alt="" width="60" height="60"/></a>
-				</div>
 			</div>
 			<div data-role="popup" id="popupBooking" data-theme="c">
 				<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">

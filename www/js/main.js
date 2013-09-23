@@ -27,8 +27,9 @@ var Main = {
 		$(document).ready(function(){
 			Main.loadConfig();
 			Main.getLoginStatus();
+			Apartments.init();
 			Home.init();
-			AutoHome.init();
+			//AutoHome.init();
 			Store.init();
 			DryClean.init();
 			CarWash.init();
@@ -70,7 +71,7 @@ var Main = {
 		
 		if(Main.unit == null || Main.password == null){
 			Login.init();
-			$.mobile.changePage('login.html', {transition:'none'});
+			$.mobile.changePage('apartment_list.html', {transition:'none'});
 		}else{
 			$.mobile.changePage('home.html', {transition:'none'});
 		}
@@ -452,20 +453,36 @@ var Main = {
 	}
 }
 
+var Apartments = {
+	init: function(){
+		$('#page-apartments').live('pageshow', function(){
+			$('#unit-list a').click(function(){
+				var unit = $(this).data('unit');
+				Main.unit = unit;
+				$.mobile.changePage('login.html');
+			});
+		});
+	}
+}
+
 var Home = {
 	degree: 25,
 	init:function(){
 		$('#page-home').live('pageshow', function(){
 			Main.currentService = 'Home';
 			
-			//Home.slider();	
+			Home.slider();	
 			Tools.initHomeCalendar();
 			Home.initFooterLinks();
 			Home.initAutoHome();
+			
+			$('#home-logout').click(function(){
+				Settings.logout();
+			});
 		});
 	},
 	slider:function(){
-		var slider = new Slider($('#ads')).fetchJson('json/ads.json').setTheme('no-control').setSize(738, 300).setTransitionFunction(SliderTransitionFunctions['squares']);
+		var slider = new Slider($('#ads')).fetchJson('json/ads.json').setTheme('no-control').setSize(738, 160).setTransitionFunction(SliderTransitionFunctions['squares']);
 	},
 	initFooterLinks:function(){
 		$('a.btn-store').click(function(){
@@ -2157,8 +2174,17 @@ var Login = {
 	init:function(){
 		if(Login.bound == false){
 			console.log('Login: init');
+
 			Login.bound = true;
 			$('#page-login').live('pagecreate', function(){
+				$('#cancel-login').click(function(){
+					Main.unit = '';
+					$.mobile.changePage('apartment_list.html', {reverse: true});
+				})
+			
+				$('#form-login #unit-text').text(Main.unit);
+				$('#form-login #unit').val(Main.unit);
+			
 				$('#form-login').validate({
 					errorPlacement: function(){
 						return;
@@ -2204,15 +2230,18 @@ var Settings = {
 		$('#page-settings').live('pageshow', function(){
 			$('#btn-logout').click(function(){
 				//window.localStorage.clear();
-				window.localStorage.removeItem('unit');
-				window.localStorage.removeItem('password');
-				Login.init();
-				$.mobile.changePage('login.html');
+				Settings.logout();
 			});
 		});
 
 		Language.init();
 		Account.init();
+	},
+	logout: function(){
+		window.localStorage.removeItem('unit');
+		window.localStorage.removeItem('password');
+		Login.init();
+		$.mobile.changePage('apartment_list.html');
 	}
 }
 

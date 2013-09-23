@@ -19,14 +19,19 @@
         	<div data-role="content">
         		<form id="form-login" action="" method="post">
         			<div data-role="fieldcontain">
-    					<label for="unit">Unit:</label>
-    					<input type="text" name="unit" id="unit" class="required" value=""  />
+    					<label for="unit" class="ui-input-text">Unit:</label>
+    					<span id="unit-text">A101</span>
+    					<input type="hidden" name="unit" id="unit" class="required" value=""/>
 					</div>
 					<div data-role="fieldcontain">
     					<label for="password">Password:</label>
     					<input type="password" name="password" id="password" class="required" value=""  />
 					</div>
-        			<input type="submit" value="Submit" id="submit-login"/>
+					<fieldset class="ui-grid-a">
+						<div class="ui-block-a"><input type="button" value="Cancel" id="cancel-login"/></div>
+						<div class="ui-block-b"><input type="submit" value="Submit" id="submit-login" data-theme="a"/></div>
+					</fieldset>
+        			
         		</form>
         	</div><!-- /content -->
         </div>
